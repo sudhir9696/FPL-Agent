@@ -1,0 +1,372 @@
+"""Human-readable output: console tables and a Markdown report."""
+
+from __future__ import annotations
+
+from typing import Iterable, Optional
+
+from .models import Squad
+
+POSITION_ORDER = {"GK": 0, "DEF": 1, "MID": 2, "FWD": 3}
+
+
+def _table(headers: list, rows: list, aligns: Optional[list] = None) -> str:
+    if not rows:
+        return "  (nothing to show)"
+    widths = [len(h) for h in headers]
+    for row in rows:
+        for i, cell in enumerate(row):
+            widths[i] = max(widths[i], len(str(cell)))
+    aligns = aligns or ["<"] * len(headers)
+
+    def line(cells: list) -> str:
+        return "  ".join(
+            f"{str(c):{aligns[i]}{widths[i]}}" for i, c in enumerate(cells)
+        ).rstrip()
+
+    out = [line(headers), "  ".join("-" * w for w in widths)]
+    out.extend(line(r) for r in rows)
+    return "\n".join(out)
+
+
+def _player_row(projection, data, role: str = "") -> list:
+    player = projection.player
+    team = data.teams.get(player.team)
+    return [
+        role,
+        player.position,
+        player.web_name[:18],
+        team.short_name if team else "?",
+        f"{player.cost:.1f}",
+        f"{projection.expected_points:.1f}",
+        f"{projection.per_gw:.1f}",
+        f"{projection.value:.2f}",
+        f"{projection.start_probability:.0%}",
+        f"{projection.fixture_score:.2f}",
+        f"{player.selected_by:.1f}%",
+    ]
+
+
+PLAYER_HEADERS = ["", "POS", "PLAYER", "TEAM", "£m", "xPTS", "/GW", "VAL", "START", "FIX", "OWN"]
+PLAYER_ALIGNS = ["<", "<", "<", "<", ">", ">", ">", ">", ">", ">", ">"]
+
+
+def format_squad(squad: Squad, data, horizon: int) -> str:
+    """Console rendering of a squad, its XI, bench and captaincy."""
+    lines = []
+    lines.append("=" * 78)
+    lines.append(
+        f"SQUAD  |  {squad.formation}  |  spend {squad.cost:.1f}m  |  "
+        f"projected {squad.expected_points:.1f} pts over {horizon} GW(s)"
+    )
+    lines.append("=" * 78)
+
+    starters = sorted(
+        squad.starters, key=lambda p: (POSITION_ORDER[p.player.position], -p.expected_points)
+    )
+    rows = []
+    for projection in starters:
+        role = ""
+        if squad.captain and projection is squad.captain:
+            role = "(C)"
+        elif squad.vice_captain and projection is squad.vice_captain:
+            role = "(V)"
+        rows.append(_player_row(projection, data, role))
+
+    lines.append("\nSTARTING XI")
+    lines.append(_table(PLAYER_HEADERS, rows, PLAYER_ALIGNS))
+
+    bench_rows = [
+        _player_row(p, data, f"{i + 1}.") for i, p in enumerate(squad.bench)
+    ]
+    lines.append("\nBENCH (substitution order)")
+    lines.append(_table(PLAYER_HEADERS, bench_rows, PLAYER_ALIGNS))
+
+    flagged = [p for p in squad.picks if p.notes]
+    if flagged:
+        lines.append("\nNOTES")
+        for projection in sorted(flagged, key=lambda p: -p.expected_points):
+            lines.append(f"  - {projection.player.web_name}: {'; '.join(projection.notes)}")
+    return "\n".join(lines)
+
+
+def format_rankings(projections: Iterable, data, title: str, limit: int = 15) -> str:
+    rows = [_player_row(p, data, f"{i + 1}.") for i, p in enumerate(list(projections)[:limit])]
+    return f"\n{title}\n" + _table(PLAYER_HEADERS, rows, PLAYER_ALIGNS)
+
+
+def format_threads(threads: Iterable, limit: int = 10) -> str:
+    rows = []
+    for i, thread in enumerate(list(threads)[:limit]):
+        rows.append([
+            f"{i + 1}.",
+            thread.title[:62],
+            thread.score,
+            thread.num_comments,
+            f"{thread.age_hours:.0f}h",
+            f"{thread.relevance:.0f}",
+        ])
+    return "\nNOTEWORTHY REDDIT THREADS\n" + _table(
+        ["", "TITLE", "UPS", "COMMENTS", "AGE", "SCORE"],
+        rows,
+        ["<", "<", ">", ">", ">", ">"],
+    )
+
+
+def format_buzz(buzz: dict, data, limit: int = 15) -> str:
+    entries = sorted(buzz.values(), key=lambda b: b.weighted_score, reverse=True)[:limit]
+    rows = []
+    for i, entry in enumerate(entries):
+        rows.append([
+            f"{i + 1}.",
+            entry.name[:18],
+            entry.mentions,
+            len(entry.threads),
+            f"{entry.weighted_score:.1f}",
+            f"{entry.sentiment:+.2f}",
+            entry.sentiment_label,
+        ])
+    return "\nCOMMUNITY BUZZ (most-discussed players)\n" + _table(
+        ["", "PLAYER", "MENTIONS", "THREADS", "WEIGHT", "SENT", "MOOD"],
+        rows,
+        ["<", "<", ">", ">", ">", ">", "<"],
+    )
+
+
+def format_cross_reference(cross: dict, data) -> str:
+    lines = ["\nMODEL vs CROWD"]
+    labels = {
+        "consensus": "Consensus buys (model and Reddit agree)",
+        "hype_traps": "Possible hype traps (loud on Reddit, weak in the model)",
+        "under_radar": "Under the radar (strong model score, little chatter)",
+    }
+    for key, label in labels.items():
+        items = cross.get(key) or []
+        lines.append(f"\n  {label}:")
+        if not items:
+            lines.append("    (none)")
+            continue
+        for item in items:
+            projection = item["projection"]
+            entry = item.get("buzz")
+            detail = (
+                f"{entry.mentions} mentions, {entry.sentiment_label}"
+                if entry
+                else "no notable chatter"
+            )
+            lines.append(
+                f"    - {projection.player.web_name} ({projection.player.position}, "
+                f"{projection.player.cost:.1f}m): {projection.expected_points:.1f} xPTS, {detail}"
+            )
+    return "\n".join(lines)
+
+
+def format_transfers(suggestions: list, data) -> str:
+    if not suggestions:
+        return "\nTRANSFER SUGGESTIONS\n  No transfer clears its points cost -- hold and roll."
+    rows = []
+    for i, move in enumerate(suggestions):
+        rows.append([
+            f"{i + 1}.",
+            move["out"].player.web_name[:16],
+            move["in"].player.web_name[:16],
+            f"{move['cost_change']:+.1f}",
+            f"{move['raw_gain']:+.1f}",
+            f"-{move['hit']}" if move["hit"] else "free",
+            f"{move['net_gain']:+.1f}",
+        ])
+    return "\nTRANSFER SUGGESTIONS\n" + _table(
+        ["", "OUT", "IN", "£m", "GAIN", "HIT", "NET"],
+        rows,
+        ["<", "<", "<", ">", ">", ">", ">"],
+    )
+
+
+def markdown_report(
+    squad: Optional[Squad],
+    projections: list,
+    data,
+    horizon: int,
+    start_gw: int,
+    threads: Optional[list] = None,
+    buzz: Optional[dict] = None,
+    cross: Optional[dict] = None,
+    transfers: Optional[list] = None,
+    generated_at: str = "",
+) -> str:
+    """A shareable Markdown write-up of the whole analysis."""
+    from .analysis import best_value, differentials, top_by_position
+
+    out = ["# FPL Squad Report", ""]
+    out.append(f"- **Planning horizon:** GW{start_gw}-GW{start_gw + horizon - 1} ({horizon} gameweeks)")
+    if generated_at:
+        out.append(f"- **Generated:** {generated_at}")
+    out.append(f"- **Player pool:** {len(projections)} players")
+    out.append("")
+
+    if squad:
+        out.append("## Recommended squad")
+        out.append("")
+        out.append(
+            f"**Formation {squad.formation}** · **{squad.cost:.1f}m spent** · "
+            f"**{squad.expected_points:.1f} projected points** (XI + captain)"
+        )
+        out.append("")
+        out.append("### Starting XI")
+        out.append("")
+        out.append("| Role | Pos | Player | Team | Price | xPTS | Per GW | Start % | Fixtures | Owned |")
+        out.append("|---|---|---|---|---|---|---|---|---|---|")
+        starters = sorted(
+            squad.starters,
+            key=lambda p: (POSITION_ORDER[p.player.position], -p.expected_points),
+        )
+        for projection in starters:
+            role = "**C**" if projection is squad.captain else (
+                "**V**" if projection is squad.vice_captain else ""
+            )
+            player = projection.player
+            team = data.teams.get(player.team)
+            out.append(
+                f"| {role} | {player.position} | {player.web_name} | "
+                f"{team.short_name if team else '?'} | {player.cost:.1f} | "
+                f"{projection.expected_points:.1f} | {projection.per_gw:.1f} | "
+                f"{projection.start_probability:.0%} | {projection.fixture_score:.2f} | "
+                f"{player.selected_by:.1f}% |"
+            )
+        out.append("")
+        out.append("### Bench")
+        out.append("")
+        for i, projection in enumerate(squad.bench):
+            out.append(
+                f"{i + 1}. **{projection.player.web_name}** ({projection.player.position}, "
+                f"{projection.player.cost:.1f}m) - {projection.expected_points:.1f} xPTS"
+            )
+        out.append("")
+
+        if squad.captain:
+            out.append(
+                f"**Captain:** {squad.captain.player.web_name} "
+                f"({squad.captain.expected_points:.1f} xPTS over the horizon, "
+                f"fixture score {squad.captain.fixture_score:.2f})"
+            )
+            out.append("")
+
+        flagged = [p for p in squad.picks if p.notes]
+        if flagged:
+            out.append("### Risk notes")
+            out.append("")
+            for projection in sorted(flagged, key=lambda p: -p.expected_points):
+                out.append(f"- **{projection.player.web_name}**: {'; '.join(projection.notes)}")
+            out.append("")
+
+    out.append("## Top projected players by position")
+    out.append("")
+    for position in ("GK", "DEF", "MID", "FWD"):
+        out.append(f"### {position}")
+        out.append("")
+        out.append("| Player | Team | Price | xPTS | Value | Start % |")
+        out.append("|---|---|---|---|---|---|")
+        for projection in top_by_position(projections, position, 8):
+            player = projection.player
+            team = data.teams.get(player.team)
+            out.append(
+                f"| {player.web_name} | {team.short_name if team else '?'} | "
+                f"{player.cost:.1f} | {projection.expected_points:.1f} | "
+                f"{projection.value:.2f} | {projection.start_probability:.0%} |"
+            )
+        out.append("")
+
+    out.append("## Best value (points per million)")
+    out.append("")
+    for projection in best_value(projections, min_points=2.0, limit=10):
+        out.append(
+            f"- **{projection.player.web_name}** ({projection.player.position}, "
+            f"{projection.player.cost:.1f}m): {projection.value:.2f} pts/m, "
+            f"{projection.expected_points:.1f} xPTS"
+        )
+    out.append("")
+
+    out.append("## Differentials (under 5% owned)")
+    out.append("")
+    for projection in differentials(projections, limit=10):
+        out.append(
+            f"- **{projection.player.web_name}** ({projection.player.position}, "
+            f"{projection.player.cost:.1f}m, {projection.player.selected_by:.1f}% owned): "
+            f"{projection.expected_points:.1f} xPTS"
+        )
+    out.append("")
+
+    if transfers:
+        out.append("## Transfer suggestions")
+        out.append("")
+        out.append("| Out | In | Price change | Raw gain | Hit | Net gain |")
+        out.append("|---|---|---|---|---|---|")
+        for move in transfers:
+            out.append(
+                f"| {move['out'].player.web_name} | {move['in'].player.web_name} | "
+                f"{move['cost_change']:+.1f} | {move['raw_gain']:+.1f} | "
+                f"{'-' + str(move['hit']) if move['hit'] else 'free'} | {move['net_gain']:+.1f} |"
+            )
+        out.append("")
+
+    if threads:
+        out.append("## Noteworthy Reddit threads")
+        out.append("")
+        for thread in threads[:12]:
+            topics = f" _({', '.join(thread.matched_topics[:3])})_" if thread.matched_topics else ""
+            out.append(
+                f"- [{thread.title}]({thread.url}) - {thread.score} upvotes, "
+                f"{thread.num_comments} comments, {thread.age_hours:.0f}h old{topics}"
+            )
+        out.append("")
+
+    if buzz:
+        out.append("## Community buzz")
+        out.append("")
+        out.append("| Player | Mentions | Threads | Sentiment | Mood |")
+        out.append("|---|---|---|---|---|")
+        entries = sorted(buzz.values(), key=lambda b: b.weighted_score, reverse=True)[:15]
+        for entry in entries:
+            out.append(
+                f"| {entry.name} | {entry.mentions} | {len(entry.threads)} | "
+                f"{entry.sentiment:+.2f} | {entry.sentiment_label} |"
+            )
+        out.append("")
+
+    if cross:
+        out.append("## Model vs crowd")
+        out.append("")
+        labels = {
+            "consensus": "Consensus buys - the model and the community agree",
+            "hype_traps": "Possible hype traps - heavily discussed, weak projection",
+            "under_radar": "Under the radar - strong projection, little chatter",
+        }
+        for key, label in labels.items():
+            items = cross.get(key) or []
+            out.append(f"### {label}")
+            out.append("")
+            if not items:
+                out.append("_None identified._")
+                out.append("")
+                continue
+            for item in items:
+                projection = item["projection"]
+                entry = item.get("buzz")
+                detail = (
+                    f"{entry.mentions} mentions, sentiment {entry.sentiment:+.2f} "
+                    f"({entry.sentiment_label})"
+                    if entry
+                    else "no notable chatter"
+                )
+                out.append(
+                    f"- **{projection.player.web_name}** ({projection.player.position}, "
+                    f"{projection.player.cost:.1f}m): {projection.expected_points:.1f} xPTS - {detail}"
+                )
+            out.append("")
+
+    out.append("---")
+    out.append("")
+    out.append(
+        "_Projections are model estimates, not predictions. Reddit sentiment is an "
+        "automated keyword reading of public comments and can misread sarcasm._"
+    )
+    return "\n".join(out)

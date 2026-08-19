@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fpl-team-builder"
+version = "0.1.0"
+description = "Build a Fantasy Premier League squad from the public FPL API, with r/FantasyPL sentiment analysis"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+dependencies = ["requests>=2.28"]
+
+[project.optional-dependencies]
+# PuLP gives a provably optimal squad; without it a local search is used.
+solver = ["pulp>=2.7"]
+dev = ["pytest>=7.0", "pulp>=2.7"]
+
+[project.scripts]
+fpl-builder = "fpl_builder.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["fpl_builder*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

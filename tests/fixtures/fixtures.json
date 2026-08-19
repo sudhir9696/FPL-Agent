@@ -1,0 +1,3802 @@
+[
+ {
+  "id": 1,
+  "event": 1,
+  "team_h": 1,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 2,
+  "event": 1,
+  "team_h": 2,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 3,
+  "event": 1,
+  "team_h": 3,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 4,
+  "event": 1,
+  "team_h": 4,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 5,
+  "event": 1,
+  "team_h": 5,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 6,
+  "event": 1,
+  "team_h": 6,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 7,
+  "event": 1,
+  "team_h": 7,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 8,
+  "event": 1,
+  "team_h": 8,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 9,
+  "event": 1,
+  "team_h": 9,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 10,
+  "event": 1,
+  "team_h": 10,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-08-02T14:00:00Z"
+ },
+ {
+  "id": 11,
+  "event": 2,
+  "team_h": 2,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 12,
+  "event": 2,
+  "team_h": 20,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 13,
+  "event": 2,
+  "team_h": 19,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 14,
+  "event": 2,
+  "team_h": 18,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 15,
+  "event": 2,
+  "team_h": 17,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 16,
+  "event": 2,
+  "team_h": 16,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 17,
+  "event": 2,
+  "team_h": 15,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 18,
+  "event": 2,
+  "team_h": 14,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 19,
+  "event": 2,
+  "team_h": 13,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 20,
+  "event": 2,
+  "team_h": 12,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-03T14:00:00Z"
+ },
+ {
+  "id": 21,
+  "event": 3,
+  "team_h": 1,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 22,
+  "event": 3,
+  "team_h": 4,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 23,
+  "event": 3,
+  "team_h": 5,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 24,
+  "event": 3,
+  "team_h": 6,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 25,
+  "event": 3,
+  "team_h": 7,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 26,
+  "event": 3,
+  "team_h": 8,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 27,
+  "event": 3,
+  "team_h": 9,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 28,
+  "event": 3,
+  "team_h": 10,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 29,
+  "event": 3,
+  "team_h": 11,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 30,
+  "event": 3,
+  "team_h": 12,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-04T14:00:00Z"
+ },
+ {
+  "id": 31,
+  "event": 4,
+  "team_h": 4,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 32,
+  "event": 4,
+  "team_h": 3,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 33,
+  "event": 4,
+  "team_h": 2,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 34,
+  "event": 4,
+  "team_h": 20,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 35,
+  "event": 4,
+  "team_h": 19,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 36,
+  "event": 4,
+  "team_h": 18,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 37,
+  "event": 4,
+  "team_h": 17,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 38,
+  "event": 4,
+  "team_h": 16,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 39,
+  "event": 4,
+  "team_h": 15,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 40,
+  "event": 4,
+  "team_h": 14,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-08-05T14:00:00Z"
+ },
+ {
+  "id": 41,
+  "event": 5,
+  "team_h": 1,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 42,
+  "event": 5,
+  "team_h": 6,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 43,
+  "event": 5,
+  "team_h": 7,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 44,
+  "event": 5,
+  "team_h": 8,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 45,
+  "event": 5,
+  "team_h": 9,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 46,
+  "event": 5,
+  "team_h": 10,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 47,
+  "event": 5,
+  "team_h": 11,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 48,
+  "event": 5,
+  "team_h": 12,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 49,
+  "event": 5,
+  "team_h": 13,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 50,
+  "event": 5,
+  "team_h": 14,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-06T14:00:00Z"
+ },
+ {
+  "id": 51,
+  "event": 6,
+  "team_h": 6,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 52,
+  "event": 6,
+  "team_h": 5,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 53,
+  "event": 6,
+  "team_h": 4,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 54,
+  "event": 6,
+  "team_h": 3,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 55,
+  "event": 6,
+  "team_h": 2,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 56,
+  "event": 6,
+  "team_h": 20,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 57,
+  "event": 6,
+  "team_h": 19,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 58,
+  "event": 6,
+  "team_h": 18,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 59,
+  "event": 6,
+  "team_h": 17,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 60,
+  "event": 6,
+  "team_h": 16,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-07T14:00:00Z"
+ },
+ {
+  "id": 61,
+  "event": 7,
+  "team_h": 1,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 62,
+  "event": 7,
+  "team_h": 8,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 63,
+  "event": 7,
+  "team_h": 9,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 64,
+  "event": 7,
+  "team_h": 10,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 65,
+  "event": 7,
+  "team_h": 11,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 66,
+  "event": 7,
+  "team_h": 12,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 67,
+  "event": 7,
+  "team_h": 13,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 68,
+  "event": 7,
+  "team_h": 14,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 69,
+  "event": 7,
+  "team_h": 15,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 70,
+  "event": 7,
+  "team_h": 16,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-08T14:00:00Z"
+ },
+ {
+  "id": 71,
+  "event": 8,
+  "team_h": 8,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 72,
+  "event": 8,
+  "team_h": 7,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 73,
+  "event": 8,
+  "team_h": 6,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 74,
+  "event": 8,
+  "team_h": 5,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 75,
+  "event": 8,
+  "team_h": 4,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 76,
+  "event": 8,
+  "team_h": 3,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 77,
+  "event": 8,
+  "team_h": 2,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 78,
+  "event": 8,
+  "team_h": 20,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 79,
+  "event": 8,
+  "team_h": 19,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 80,
+  "event": 8,
+  "team_h": 18,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-09T14:00:00Z"
+ },
+ {
+  "id": 81,
+  "event": 9,
+  "team_h": 1,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 82,
+  "event": 9,
+  "team_h": 10,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 83,
+  "event": 9,
+  "team_h": 11,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 84,
+  "event": 9,
+  "team_h": 12,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 85,
+  "event": 9,
+  "team_h": 13,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 86,
+  "event": 9,
+  "team_h": 14,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 87,
+  "event": 9,
+  "team_h": 15,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 88,
+  "event": 9,
+  "team_h": 16,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 89,
+  "event": 9,
+  "team_h": 17,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 90,
+  "event": 9,
+  "team_h": 18,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-09-10T14:00:00Z"
+ },
+ {
+  "id": 91,
+  "event": 10,
+  "team_h": 10,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 92,
+  "event": 10,
+  "team_h": 9,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 93,
+  "event": 10,
+  "team_h": 8,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 94,
+  "event": 10,
+  "team_h": 7,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 95,
+  "event": 10,
+  "team_h": 6,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 96,
+  "event": 10,
+  "team_h": 5,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 97,
+  "event": 10,
+  "team_h": 4,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 98,
+  "event": 10,
+  "team_h": 3,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 99,
+  "event": 10,
+  "team_h": 2,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 100,
+  "event": 10,
+  "team_h": 20,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-11T14:00:00Z"
+ },
+ {
+  "id": 101,
+  "event": 11,
+  "team_h": 1,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 102,
+  "event": 11,
+  "team_h": 12,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 103,
+  "event": 11,
+  "team_h": 13,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 104,
+  "event": 11,
+  "team_h": 14,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 105,
+  "event": 11,
+  "team_h": 15,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 106,
+  "event": 11,
+  "team_h": 16,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 107,
+  "event": 11,
+  "team_h": 17,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 108,
+  "event": 11,
+  "team_h": 18,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 109,
+  "event": 11,
+  "team_h": 19,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 110,
+  "event": 11,
+  "team_h": 20,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-12T14:00:00Z"
+ },
+ {
+  "id": 111,
+  "event": 12,
+  "team_h": 12,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 112,
+  "event": 12,
+  "team_h": 11,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 113,
+  "event": 12,
+  "team_h": 10,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 114,
+  "event": 12,
+  "team_h": 9,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 115,
+  "event": 12,
+  "team_h": 8,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 116,
+  "event": 12,
+  "team_h": 7,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 117,
+  "event": 12,
+  "team_h": 6,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 118,
+  "event": 12,
+  "team_h": 5,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 119,
+  "event": 12,
+  "team_h": 4,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 120,
+  "event": 12,
+  "team_h": 3,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": true,
+  "kickoff_time": "2025-10-13T14:00:00Z"
+ },
+ {
+  "id": 121,
+  "event": 13,
+  "team_h": 1,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 122,
+  "event": 13,
+  "team_h": 14,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 123,
+  "event": 13,
+  "team_h": 15,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 124,
+  "event": 13,
+  "team_h": 16,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 125,
+  "event": 13,
+  "team_h": 17,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 126,
+  "event": 13,
+  "team_h": 18,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 127,
+  "event": 13,
+  "team_h": 19,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 128,
+  "event": 13,
+  "team_h": 20,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 129,
+  "event": 13,
+  "team_h": 2,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 130,
+  "event": 13,
+  "team_h": 3,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-10-14T14:00:00Z"
+ },
+ {
+  "id": 131,
+  "event": 14,
+  "team_h": 14,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 132,
+  "event": 14,
+  "team_h": 13,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 133,
+  "event": 14,
+  "team_h": 12,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 134,
+  "event": 14,
+  "team_h": 11,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 135,
+  "event": 14,
+  "team_h": 10,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 136,
+  "event": 14,
+  "team_h": 9,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 137,
+  "event": 14,
+  "team_h": 8,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 138,
+  "event": 14,
+  "team_h": 7,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 139,
+  "event": 14,
+  "team_h": 6,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 140,
+  "event": 14,
+  "team_h": 5,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-10-15T14:00:00Z"
+ },
+ {
+  "id": 141,
+  "event": 15,
+  "team_h": 1,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 142,
+  "event": 15,
+  "team_h": 16,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 143,
+  "event": 15,
+  "team_h": 17,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 144,
+  "event": 15,
+  "team_h": 18,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 145,
+  "event": 15,
+  "team_h": 19,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 146,
+  "event": 15,
+  "team_h": 20,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 147,
+  "event": 15,
+  "team_h": 2,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 148,
+  "event": 15,
+  "team_h": 3,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 149,
+  "event": 15,
+  "team_h": 4,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 150,
+  "event": 15,
+  "team_h": 5,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-16T14:00:00Z"
+ },
+ {
+  "id": 151,
+  "event": 16,
+  "team_h": 16,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 152,
+  "event": 16,
+  "team_h": 15,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 153,
+  "event": 16,
+  "team_h": 14,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 154,
+  "event": 16,
+  "team_h": 13,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 155,
+  "event": 16,
+  "team_h": 12,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 156,
+  "event": 16,
+  "team_h": 11,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 157,
+  "event": 16,
+  "team_h": 10,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 158,
+  "event": 16,
+  "team_h": 9,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 159,
+  "event": 16,
+  "team_h": 8,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 160,
+  "event": 16,
+  "team_h": 7,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-17T14:00:00Z"
+ },
+ {
+  "id": 161,
+  "event": 17,
+  "team_h": 1,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 162,
+  "event": 17,
+  "team_h": 18,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 163,
+  "event": 17,
+  "team_h": 19,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 164,
+  "event": 17,
+  "team_h": 20,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 165,
+  "event": 17,
+  "team_h": 2,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 166,
+  "event": 17,
+  "team_h": 3,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 167,
+  "event": 17,
+  "team_h": 4,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 168,
+  "event": 17,
+  "team_h": 5,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 169,
+  "event": 17,
+  "team_h": 6,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 170,
+  "event": 17,
+  "team_h": 7,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-18T14:00:00Z"
+ },
+ {
+  "id": 171,
+  "event": 18,
+  "team_h": 18,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 172,
+  "event": 18,
+  "team_h": 17,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 173,
+  "event": 18,
+  "team_h": 16,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 174,
+  "event": 18,
+  "team_h": 15,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 175,
+  "event": 18,
+  "team_h": 14,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 176,
+  "event": 18,
+  "team_h": 13,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 177,
+  "event": 18,
+  "team_h": 12,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 178,
+  "event": 18,
+  "team_h": 11,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 179,
+  "event": 18,
+  "team_h": 10,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 180,
+  "event": 18,
+  "team_h": 9,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-19T14:00:00Z"
+ },
+ {
+  "id": 181,
+  "event": 19,
+  "team_h": 1,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 182,
+  "event": 19,
+  "team_h": 20,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 183,
+  "event": 19,
+  "team_h": 2,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 184,
+  "event": 19,
+  "team_h": 3,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 185,
+  "event": 19,
+  "team_h": 4,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 186,
+  "event": 19,
+  "team_h": 5,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 187,
+  "event": 19,
+  "team_h": 6,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 188,
+  "event": 19,
+  "team_h": 7,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 189,
+  "event": 19,
+  "team_h": 8,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 190,
+  "event": 19,
+  "team_h": 9,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-11-20T14:00:00Z"
+ },
+ {
+  "id": 191,
+  "event": 20,
+  "team_h": 20,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 192,
+  "event": 20,
+  "team_h": 19,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 193,
+  "event": 20,
+  "team_h": 18,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 194,
+  "event": 20,
+  "team_h": 17,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 195,
+  "event": 20,
+  "team_h": 16,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 196,
+  "event": 20,
+  "team_h": 15,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 197,
+  "event": 20,
+  "team_h": 14,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 198,
+  "event": 20,
+  "team_h": 13,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 199,
+  "event": 20,
+  "team_h": 12,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 200,
+  "event": 20,
+  "team_h": 11,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-12-21T14:00:00Z"
+ },
+ {
+  "id": 201,
+  "event": 21,
+  "team_h": 1,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 202,
+  "event": 21,
+  "team_h": 3,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 203,
+  "event": 21,
+  "team_h": 4,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 204,
+  "event": 21,
+  "team_h": 5,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 205,
+  "event": 21,
+  "team_h": 6,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 206,
+  "event": 21,
+  "team_h": 7,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 207,
+  "event": 21,
+  "team_h": 8,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 208,
+  "event": 21,
+  "team_h": 9,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 209,
+  "event": 21,
+  "team_h": 10,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 210,
+  "event": 21,
+  "team_h": 11,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-12-22T14:00:00Z"
+ },
+ {
+  "id": 211,
+  "event": 22,
+  "team_h": 3,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 212,
+  "event": 22,
+  "team_h": 2,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 213,
+  "event": 22,
+  "team_h": 20,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 214,
+  "event": 22,
+  "team_h": 19,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 215,
+  "event": 22,
+  "team_h": 18,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 216,
+  "event": 22,
+  "team_h": 17,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 217,
+  "event": 22,
+  "team_h": 16,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 218,
+  "event": 22,
+  "team_h": 15,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 219,
+  "event": 22,
+  "team_h": 14,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 220,
+  "event": 22,
+  "team_h": 13,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-23T14:00:00Z"
+ },
+ {
+  "id": 221,
+  "event": 23,
+  "team_h": 1,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 222,
+  "event": 23,
+  "team_h": 5,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 223,
+  "event": 23,
+  "team_h": 6,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 224,
+  "event": 23,
+  "team_h": 7,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 225,
+  "event": 23,
+  "team_h": 8,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 226,
+  "event": 23,
+  "team_h": 9,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 227,
+  "event": 23,
+  "team_h": 10,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 228,
+  "event": 23,
+  "team_h": 11,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 229,
+  "event": 23,
+  "team_h": 12,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 230,
+  "event": 23,
+  "team_h": 13,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-24T14:00:00Z"
+ },
+ {
+  "id": 231,
+  "event": 24,
+  "team_h": 5,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 232,
+  "event": 24,
+  "team_h": 4,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 233,
+  "event": 24,
+  "team_h": 3,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 234,
+  "event": 24,
+  "team_h": 2,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 235,
+  "event": 24,
+  "team_h": 20,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 236,
+  "event": 24,
+  "team_h": 19,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 237,
+  "event": 24,
+  "team_h": 18,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 238,
+  "event": 24,
+  "team_h": 17,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 239,
+  "event": 24,
+  "team_h": 16,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 240,
+  "event": 24,
+  "team_h": 15,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-12-25T14:00:00Z"
+ },
+ {
+  "id": 241,
+  "event": 25,
+  "team_h": 1,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 242,
+  "event": 25,
+  "team_h": 7,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 243,
+  "event": 25,
+  "team_h": 8,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 244,
+  "event": 25,
+  "team_h": 9,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 245,
+  "event": 25,
+  "team_h": 10,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 246,
+  "event": 25,
+  "team_h": 11,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 247,
+  "event": 25,
+  "team_h": 12,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 248,
+  "event": 25,
+  "team_h": 13,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 249,
+  "event": 25,
+  "team_h": 14,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 250,
+  "event": 25,
+  "team_h": 15,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-26T14:00:00Z"
+ },
+ {
+  "id": 251,
+  "event": 26,
+  "team_h": 7,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 252,
+  "event": 26,
+  "team_h": 6,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 253,
+  "event": 26,
+  "team_h": 5,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 254,
+  "event": 26,
+  "team_h": 4,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 255,
+  "event": 26,
+  "team_h": 3,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 256,
+  "event": 26,
+  "team_h": 2,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 257,
+  "event": 26,
+  "team_h": 20,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 258,
+  "event": 26,
+  "team_h": 19,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 259,
+  "event": 26,
+  "team_h": 18,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 260,
+  "event": 26,
+  "team_h": 17,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-13-27T14:00:00Z"
+ },
+ {
+  "id": 261,
+  "event": 27,
+  "team_h": 1,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 262,
+  "event": 27,
+  "team_h": 9,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 263,
+  "event": 27,
+  "team_h": 10,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 264,
+  "event": 27,
+  "team_h": 11,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 265,
+  "event": 27,
+  "team_h": 12,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 266,
+  "event": 27,
+  "team_h": 13,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 267,
+  "event": 27,
+  "team_h": 14,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 268,
+  "event": 27,
+  "team_h": 15,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 269,
+  "event": 27,
+  "team_h": 16,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 270,
+  "event": 27,
+  "team_h": 17,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-13-28T14:00:00Z"
+ },
+ {
+  "id": 271,
+  "event": 28,
+  "team_h": 9,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 272,
+  "event": 28,
+  "team_h": 8,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 273,
+  "event": 28,
+  "team_h": 7,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 274,
+  "event": 28,
+  "team_h": 6,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 275,
+  "event": 28,
+  "team_h": 5,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 276,
+  "event": 28,
+  "team_h": 4,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 277,
+  "event": 28,
+  "team_h": 3,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 278,
+  "event": 28,
+  "team_h": 2,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 279,
+  "event": 28,
+  "team_h": 20,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 280,
+  "event": 28,
+  "team_h": 19,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-01T14:00:00Z"
+ },
+ {
+  "id": 281,
+  "event": 29,
+  "team_h": 1,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 282,
+  "event": 29,
+  "team_h": 11,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 283,
+  "event": 29,
+  "team_h": 12,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 284,
+  "event": 29,
+  "team_h": 13,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 285,
+  "event": 29,
+  "team_h": 14,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 286,
+  "event": 29,
+  "team_h": 15,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 287,
+  "event": 29,
+  "team_h": 16,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 288,
+  "event": 29,
+  "team_h": 17,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 289,
+  "event": 29,
+  "team_h": 18,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 290,
+  "event": 29,
+  "team_h": 19,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-13-02T14:00:00Z"
+ },
+ {
+  "id": 291,
+  "event": 30,
+  "team_h": 11,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 292,
+  "event": 30,
+  "team_h": 10,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 293,
+  "event": 30,
+  "team_h": 9,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 294,
+  "event": 30,
+  "team_h": 8,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 295,
+  "event": 30,
+  "team_h": 7,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 296,
+  "event": 30,
+  "team_h": 6,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 297,
+  "event": 30,
+  "team_h": 5,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 298,
+  "event": 30,
+  "team_h": 4,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 299,
+  "event": 30,
+  "team_h": 3,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 300,
+  "event": 30,
+  "team_h": 2,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-03T14:00:00Z"
+ },
+ {
+  "id": 301,
+  "event": 31,
+  "team_h": 1,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 302,
+  "event": 31,
+  "team_h": 13,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 303,
+  "event": 31,
+  "team_h": 14,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 304,
+  "event": 31,
+  "team_h": 15,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 305,
+  "event": 31,
+  "team_h": 16,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 306,
+  "event": 31,
+  "team_h": 17,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 307,
+  "event": 31,
+  "team_h": 18,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 308,
+  "event": 31,
+  "team_h": 19,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 309,
+  "event": 31,
+  "team_h": 20,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 310,
+  "event": 31,
+  "team_h": 2,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-04T14:00:00Z"
+ },
+ {
+  "id": 311,
+  "event": 32,
+  "team_h": 13,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 312,
+  "event": 32,
+  "team_h": 12,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 313,
+  "event": 32,
+  "team_h": 11,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 314,
+  "event": 32,
+  "team_h": 10,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 315,
+  "event": 32,
+  "team_h": 9,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 316,
+  "event": 32,
+  "team_h": 8,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 317,
+  "event": 32,
+  "team_h": 7,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 318,
+  "event": 32,
+  "team_h": 6,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 319,
+  "event": 32,
+  "team_h": 5,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 320,
+  "event": 32,
+  "team_h": 4,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-05T14:00:00Z"
+ },
+ {
+  "id": 321,
+  "event": 33,
+  "team_h": 1,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 322,
+  "event": 33,
+  "team_h": 15,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 323,
+  "event": 33,
+  "team_h": 16,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 324,
+  "event": 33,
+  "team_h": 17,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 325,
+  "event": 33,
+  "team_h": 18,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 326,
+  "event": 33,
+  "team_h": 19,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 327,
+  "event": 33,
+  "team_h": 20,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 328,
+  "event": 33,
+  "team_h": 2,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 329,
+  "event": 33,
+  "team_h": 3,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 330,
+  "event": 33,
+  "team_h": 4,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-06T14:00:00Z"
+ },
+ {
+  "id": 331,
+  "event": 34,
+  "team_h": 15,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 332,
+  "event": 34,
+  "team_h": 14,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 333,
+  "event": 34,
+  "team_h": 13,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 334,
+  "event": 34,
+  "team_h": 12,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 335,
+  "event": 34,
+  "team_h": 11,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 336,
+  "event": 34,
+  "team_h": 10,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 337,
+  "event": 34,
+  "team_h": 9,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 338,
+  "event": 34,
+  "team_h": 8,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 339,
+  "event": 34,
+  "team_h": 7,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 340,
+  "event": 34,
+  "team_h": 6,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-14-07T14:00:00Z"
+ },
+ {
+  "id": 341,
+  "event": 35,
+  "team_h": 1,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 342,
+  "event": 35,
+  "team_h": 17,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 343,
+  "event": 35,
+  "team_h": 18,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 344,
+  "event": 35,
+  "team_h": 19,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 345,
+  "event": 35,
+  "team_h": 20,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 346,
+  "event": 35,
+  "team_h": 2,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 347,
+  "event": 35,
+  "team_h": 3,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 348,
+  "event": 35,
+  "team_h": 4,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 349,
+  "event": 35,
+  "team_h": 5,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 350,
+  "event": 35,
+  "team_h": 6,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-08T14:00:00Z"
+ },
+ {
+  "id": 351,
+  "event": 36,
+  "team_h": 17,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 352,
+  "event": 36,
+  "team_h": 16,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 353,
+  "event": 36,
+  "team_h": 15,
+  "team_a": 19,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 354,
+  "event": 36,
+  "team_h": 14,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 355,
+  "event": 36,
+  "team_h": 13,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 356,
+  "event": 36,
+  "team_h": 12,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 357,
+  "event": 36,
+  "team_h": 11,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 358,
+  "event": 36,
+  "team_h": 10,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 359,
+  "event": 36,
+  "team_h": 9,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 360,
+  "event": 36,
+  "team_h": 8,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-09T14:00:00Z"
+ },
+ {
+  "id": 361,
+  "event": 37,
+  "team_h": 1,
+  "team_a": 18,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 362,
+  "event": 37,
+  "team_h": 19,
+  "team_a": 17,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 363,
+  "event": 37,
+  "team_h": 20,
+  "team_a": 16,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 364,
+  "event": 37,
+  "team_h": 2,
+  "team_a": 15,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 365,
+  "event": 37,
+  "team_h": 3,
+  "team_a": 14,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 366,
+  "event": 37,
+  "team_h": 4,
+  "team_a": 13,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 367,
+  "event": 37,
+  "team_h": 5,
+  "team_a": 12,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 368,
+  "event": 37,
+  "team_h": 6,
+  "team_a": 11,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 369,
+  "event": 37,
+  "team_h": 7,
+  "team_a": 10,
+  "team_h_difficulty": 2,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 370,
+  "event": 37,
+  "team_h": 8,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-10T14:00:00Z"
+ },
+ {
+  "id": 371,
+  "event": 38,
+  "team_h": 19,
+  "team_a": 1,
+  "team_h_difficulty": 5,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ },
+ {
+  "id": 372,
+  "event": 38,
+  "team_h": 18,
+  "team_a": 20,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ },
+ {
+  "id": 373,
+  "event": 38,
+  "team_h": 17,
+  "team_a": 2,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ },
+ {
+  "id": 374,
+  "event": 38,
+  "team_h": 16,
+  "team_a": 3,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 4,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ },
+ {
+  "id": 375,
+  "event": 38,
+  "team_h": 15,
+  "team_a": 4,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ },
+ {
+  "id": 376,
+  "event": 38,
+  "team_h": 14,
+  "team_a": 5,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ },
+ {
+  "id": 377,
+  "event": 38,
+  "team_h": 13,
+  "team_a": 6,
+  "team_h_difficulty": 4,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ },
+ {
+  "id": 378,
+  "event": 38,
+  "team_h": 12,
+  "team_a": 7,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 5,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ },
+ {
+  "id": 379,
+  "event": 38,
+  "team_h": 11,
+  "team_a": 8,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ },
+ {
+  "id": 380,
+  "event": 38,
+  "team_h": 10,
+  "team_a": 9,
+  "team_h_difficulty": 3,
+  "team_a_difficulty": 3,
+  "finished": false,
+  "kickoff_time": "2025-15-11T14:00:00Z"
+ }
+]
