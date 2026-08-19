@@ -370,3 +370,63 @@ def markdown_report(
         "automated keyword reading of public comments and can misread sarcasm._"
     )
     return "\n".join(out)
+
+
+def format_standings(league: dict, entries: list, limit: int = 20,
+                     highlight: int = 0) -> str:
+    rows = []
+    for entry in entries[:limit]:
+        marker = "<<" if entry.entry == highlight else ""
+        movement = ""
+        if entry.last_rank and entry.rank:
+            delta = entry.last_rank - entry.rank
+            movement = f"{delta:+d}" if delta else "-"
+        rows.append([
+            entry.rank, entry.entry_name[:26], entry.player_name[:20],
+            entry.total, entry.event_total, movement, entry.entry, marker,
+        ])
+    title = f"\nLEAGUE: {league.get('name', '?')} (id {league.get('id', '?')})"
+    return title + "\n" + _table(
+        ["RANK", "TEAM", "MANAGER", "TOTAL", "GW", "MOVE", "ENTRY ID", ""],
+        rows,
+        [">", "<", "<", ">", ">", ">", ">", "<"],
+    )
+
+
+def format_league_ownership(rows: list, limit: int = 20) -> str:
+    table_rows = []
+    for i, row in enumerate(rows[:limit]):
+        table_rows.append([
+            f"{i + 1}.", row.position, row.name[:18], f"{row.cost:.1f}",
+            f"{row.league_owners}/{row.league_size}",
+            f"{row.league_ownership:.0f}%", f"{row.global_ownership:.1f}%",
+            f"{row.edge:+.0f}", f"{row.effective_ownership:.0f}%",
+            f"{row.expected_points:.1f}",
+        ])
+    return "\nLEAGUE OWNERSHIP\n" + _table(
+        ["", "POS", "PLAYER", "£m", "OWNED", "LGE%", "GLOBAL%", "EDGE", "EO%", "xPTS"],
+        table_rows,
+        ["<", "<", "<", ">", ">", ">", ">", ">", ">", ">"],
+    )
+
+
+def format_league_comparison(comparison: dict, team_name: str) -> str:
+    lines = [f"\nYOUR POSITION IN THE LEAGUE ({team_name})"]
+    labels = {
+        "my_differentials": "Your differentials (you own, most rivals do not)",
+        "my_risks": "Your risks (most rivals own, you do not)",
+        "shared_template": "Shared template (you and the league both own)",
+    }
+    for key, label in labels.items():
+        rows = comparison.get(key) or []
+        lines.append(f"\n  {label}:")
+        if not rows:
+            lines.append("    (none)")
+            continue
+        for row in rows[:10]:
+            lines.append(
+                f"    - {row.name} ({row.position}, {row.cost:.1f}m): "
+                f"{row.league_ownership:.0f}% of the league, "
+                f"{row.global_ownership:.1f}% globally, {row.expected_points:.1f} xPTS"
+            )
+    return "\n".join(lines)

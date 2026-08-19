@@ -115,3 +115,42 @@ def test_save_round_trips(tmp_path, data):
     assert len(reloaded.players) == len(data.players)
     assert len(reloaded.fixtures) == len(data.fixtures)
     assert reloaded.next_gameweek == data.next_gameweek
+
+
+def test_league_entries_follows_pagination(tmp_path):
+    """The standings walker must page until has_next is false."""
+    pages = {
+        1: {"league": {"id": 804829, "name": "Test"},
+            "standings": {"has_next": True, "page": 1,
+                          "results": [{"entry": i, "rank": i} for i in range(1, 51)]}},
+        2: {"league": {"id": 804829, "name": "Test"},
+            "standings": {"has_next": False, "page": 2,
+                          "results": [{"entry": i, "rank": i} for i in range(51, 71)]}},
+    }
+
+    class Pager(FakeSession):
+        def get(self, url, timeout=None):
+            page = int(url.split("page_standings=")[1])
+            return FakeResponse(pages[page])
+
+    client = FPLClient(cache_dir=tmp_path, session=Pager())
+    league, entries = client.league_entries(804829, max_entries=100)
+    assert league["name"] == "Test"
+    assert len(entries) == 70
+
+
+def test_league_entries_respects_max_entries(tmp_path):
+    payload = {"league": {"id": 1, "name": "T"},
+               "standings": {"has_next": True, "page": 1,
+                             "results": [{"entry": i, "rank": i} for i in range(1, 51)]}}
+    client = FPLClient(cache_dir=tmp_path, session=FakeSession(payload))
+    _, entries = client.league_entries(1, max_entries=10)
+    assert len(entries) == 10
+
+
+def test_league_entries_stops_on_empty_page(tmp_path):
+    payload = {"league": {"id": 1, "name": "T"},
+               "standings": {"has_next": True, "results": []}}
+    client = FPLClient(cache_dir=tmp_path, session=FakeSession(payload))
+    _, entries = client.league_entries(1, max_entries=100)
+    assert entries == []

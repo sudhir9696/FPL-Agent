@@ -12,6 +12,9 @@ from typing import Optional
 from . import report
 from .analysis import ModelConfig, ProjectionModel, best_value, differentials, top_by_position
 from .api import FPLClient, FPLError, GameData
+from .league import (
+    LeagueEntry, compare_to_league, find_entry, load_picks, ownership_table,
+)
 from .models import POSITIONS
 from .optimizer import OptimizerError, build_squad_object, optimize_squad, suggest_transfers
 from .reddit import RedditClient, RedditError, cross_reference, extract_player_buzz, gather_threads
@@ -274,6 +277,66 @@ def cmd_team(args) -> int:
     return 0
 
 
+def cmd_league(args) -> int:
+    data = load_game_data(args)
+    config = build_model_config(args)
+    start_gw = args.gw or data.next_gameweek
+    projections = ProjectionModel(data, config).project_all(start_gw=start_gw)
+
+    client = FPLClient(cache_dir=args.cache_dir)
+    try:
+        league_meta, raw_entries = client.league_entries(
+            args.league_id, max_entries=args.max_entries, use_cache=not args.refresh
+        )
+    except FPLError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+
+    entries = [LeagueEntry.from_api(r) for r in raw_entries]
+    if not entries:
+        print(f"error: league {args.league_id} returned no entries.", file=sys.stderr)
+        return 1
+
+    me = None
+    if args.me:
+        me = find_entry(entries, args.me) if not str(args.me).isdigit() else next(
+            (e for e in entries if e.entry == int(args.me)), None
+        )
+        if me is None:
+            print(f"warning: '{args.me}' not found in the first {len(entries)} entries.",
+                  file=sys.stderr)
+
+    print(report.format_standings(league_meta, entries, limit=args.limit,
+                                  highlight=me.entry if me else 0))
+    if me:
+        print(f"\nFound you: '{me.entry_name}' ({me.player_name}) "
+              f"-- entry id {me.entry}, rank {me.rank}, {me.total} pts")
+
+    if not args.analyze:
+        print("\nRe-run with --analyze to pull rival squads and compare ownership.")
+        return 0
+
+    picks_gw = args.picks_gw or max(1, data.current_gameweek)
+    targets = entries[:args.analyze]
+    if me and me not in targets:
+        targets = targets + [me]
+
+    print(f"\nLoading picks for {len(targets)} managers from GW{picks_gw}...")
+    loaded = load_picks(client, targets, picks_gw, use_cache=not args.refresh)
+    if not loaded:
+        print("error: no rival squads could be loaded.", file=sys.stderr)
+        return 1
+
+    rows = ownership_table(loaded, data, projections)
+    print(report.format_league_ownership(rows, limit=args.limit))
+
+    if me and me.picks:
+        comparison = compare_to_league(me, rows, min_rival_ownership=args.template_threshold)
+        print(report.format_league_comparison(comparison, me.entry_name))
+
+    return 0
+
+
 def cmd_fetch(args) -> int:
     """Download and store the raw payloads for later offline runs."""
     client = FPLClient(cache_dir=args.cache_dir)
@@ -382,6 +445,22 @@ def build_parser() -> argparse.ArgumentParser:
     team.add_argument("--free-transfers", type=int, default=1)
     team.add_argument("--max-transfers", type=int, default=3)
     team.set_defaults(func=cmd_team)
+
+    league = subparsers.add_parser("league", help="analyse a mini-league's standings and ownership")
+    _add_common_args(league)
+    league.add_argument("league_id", type=int, help="classic league id (from the league URL)")
+    league.add_argument("--me", default=None,
+                        help="your team name, manager name or entry id, to compare against rivals")
+    league.add_argument("--analyze", type=int, default=0, metavar="N",
+                        help="pull picks for the top N managers and compare ownership")
+    league.add_argument("--max-entries", type=int, default=50,
+                        help="standings rows to fetch (default: 50)")
+    league.add_argument("--picks-gw", type=int, default=None,
+                        help="gameweek to read picks from (default: current)")
+    league.add_argument("--limit", type=int, default=20, help="rows to show (default: 20)")
+    league.add_argument("--template-threshold", type=float, default=40.0,
+                        help="league ownership %% above which a player counts as template")
+    league.set_defaults(func=cmd_league)
 
     fetch = subparsers.add_parser("fetch", help="save API data for offline use")
     _add_common_args(fetch)

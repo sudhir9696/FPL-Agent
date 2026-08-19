@@ -48,6 +48,9 @@ fpl-builder players --sort value --max-price 6.0
 
 # Reddit digest on its own
 fpl-builder reddit
+
+# Your mini-league: standings, rival ownership, your differentials
+fpl-builder league 804829 --me "DontBottleThisYear" --analyze 20
 ```
 
 Every command also runs as `python -m fpl_builder.cli ...`.
@@ -78,6 +81,7 @@ past your free transfers must beat its own −4 hit to be suggested.
 |---|---|
 | `build` | Optimise a squad from scratch |
 | `team <entry-id>` | Show your current team and suggest transfers |
+| `league <league-id>` | Mini-league standings, ownership and your edge |
 | `players` | Rank players by points, value or differential status |
 | `reddit` | Noteworthy threads and community buzz |
 | `fetch` | Save API data locally for offline runs |
@@ -95,6 +99,40 @@ past your free transfers must beat its own −4 hit to be suggested.
 --no-reddit                  # skip community analysis
 --weight-model 0.8 --weight-form 0.1 --weight-ep 0.1   # retune the blend
 ```
+
+## Mini-league analysis
+
+Global ownership is the wrong yardstick when you are chasing 30 people in a
+work league. A player owned by 4% of the world but 60% of your rivals is
+*template to you* — owning them protects your rank but wins you nothing.
+
+```bash
+# Standings only — this is also how you find your entry ID
+fpl-builder league 804829
+
+# Pull rival squads and compare
+fpl-builder league 804829 --me "DontBottleThisYear" --analyze 20
+```
+
+The league ID comes straight out of the league URL:
+
+```
+https://fantasy.premierleague.com/leagues/804829/standings/c
+                                          ^^^^^^ league id
+```
+
+`--me` accepts your team name, your manager name or your entry ID, and prints
+your entry ID back to you — handy, since it is otherwise buried in a URL.
+
+With `--analyze N` it loads the top N managers' squads and reports:
+
+- **League ownership** with an `EDGE` column (league % minus global %) and
+  effective ownership including captaincy — the number that actually moves rank
+- **Your differentials** — you own them, most rivals do not
+- **Your risks** — most rivals own them, you do not. These are what wreck a
+  league position on a haul week
+- **Shared template** — held by both you and the field
+
 
 ## How the projection works
 
@@ -191,6 +229,7 @@ data). `--refresh` forces a refetch.
 | `event/{gw}/live/` | live points during a gameweek |
 | `entry/{id}/` | manager summary and bank |
 | `entry/{id}/event/{gw}/picks/` | your 15 picks |
+| `leagues-classic/{id}/standings/` | mini-league standings (paginated) |
 
 ## Tests
 
@@ -198,9 +237,9 @@ data). `--refresh` forces a refetch.
 python -m pytest -q
 ```
 
-105 tests cover parsing, the projection maths, squad legality under every
+133 tests cover parsing, the projection maths, squad legality under every
 constraint, ILP-vs-heuristic optimality, Reddit parsing and sentiment scoping,
-and end-to-end CLI runs. They use a generated dataset that mirrors the real API
+league ownership maths, and end-to-end CLI runs. They use a generated dataset that mirrors the real API
 schema, so the suite runs with no network access:
 
 ```bash

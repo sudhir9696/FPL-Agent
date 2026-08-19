@@ -135,6 +135,37 @@ class FPLClient:
         """A manager's 15 picks for a given gameweek."""
         return self.get(f"entry/{entry_id}/event/{gameweek}/picks/", use_cache=use_cache)
 
+    # --- league endpoints ---------------------------------------------
+    def league_standings(self, league_id: int, page: int = 1, use_cache: bool = True) -> dict:
+        """One page of a classic league's standings (50 entries per page)."""
+        return self.get(
+            f"leagues-classic/{league_id}/standings/?page_standings={page}",
+            use_cache=use_cache,
+        )
+
+    def league_entries(
+        self, league_id: int, max_entries: int = 50, use_cache: bool = True
+    ) -> tuple:
+        """Walk a classic league's standings pages.
+
+        Returns (league_metadata, list_of_entries).
+        """
+        entries: list = []
+        league: dict = {}
+        page = 1
+        while len(entries) < max_entries:
+            payload = self.league_standings(league_id, page=page, use_cache=use_cache)
+            league = payload.get("league", league)
+            standings = payload.get("standings", {})
+            results = standings.get("results", [])
+            if not results:
+                break
+            entries.extend(results)
+            if not standings.get("has_next"):
+                break
+            page += 1
+        return league, entries[:max_entries]
+
 
 class GameData:
     """Parsed, indexed view of bootstrap-static + fixtures."""
