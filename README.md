@@ -237,7 +237,7 @@ data). `--refresh` forces a refetch.
 python -m pytest -q
 ```
 
-133 tests cover parsing, the projection maths, squad legality under every
+139 tests cover parsing, the projection maths, squad legality under every
 constraint, ILP-vs-heuristic optimality, Reddit parsing and sentiment scoping,
 league ownership maths, and end-to-end CLI runs. They use a generated dataset that mirrors the real API
 schema, so the suite runs with no network access:

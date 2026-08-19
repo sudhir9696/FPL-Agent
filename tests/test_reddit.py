@@ -282,3 +282,71 @@ def test_sentiment_splits_on_contrastive_conjunctions():
     thread = make_thread(selftext="I wanted Haaland but Salah is essential")
     buzz = extract_player_buzz([score_thread(thread)], players)
     assert buzz[1].positive > 0
+
+
+# --- alias ambiguity -------------------------------------------------
+def test_shared_surname_is_not_credited_to_every_player():
+    """Regression: 'Silva' matched several players and inflated all of them."""
+    players = [
+        make_player(1, "B.Silva", second_name="Silva", first_name="Bernardo"),
+        make_player(2, "T.Silva", second_name="Silva", first_name="Thiago"),
+    ]
+    for player in players:
+        player.selected_by = 10.0        # equally owned: genuinely ambiguous
+    thread = make_thread(selftext="Silva is essential this week")
+    buzz = extract_player_buzz([score_thread(thread)], players)
+    # Neither is credited, rather than both.
+    assert buzz == {}
+
+
+def test_dominant_player_wins_an_ambiguous_surname():
+    players = [
+        make_player(1, "B.Silva", second_name="Silva", first_name="Bernardo"),
+        make_player(2, "T.Silva", second_name="Silva", first_name="Thiago"),
+    ]
+    players[0].selected_by = 30.0
+    players[1].selected_by = 2.0
+    thread = make_thread(selftext="Silva is essential this week")
+    buzz = extract_player_buzz([score_thread(thread)], players)
+    assert list(buzz) == [1]
+
+
+def test_benchwarmer_does_not_steal_an_ambiguous_surname():
+    """Only one candidate has minutes, so the alias resolves to them."""
+    starter = make_player(1, "Gomes", second_name="Gomes")
+    reserve = make_player(2, "Gomes 2", second_name="Gomes")
+    reserve.minutes = 0
+    starter.selected_by = reserve.selected_by = 5.0
+    thread = make_thread(selftext="Gomes is nailed on")
+    buzz = extract_player_buzz([score_thread(thread)], [starter, reserve])
+    assert list(buzz) == [1]
+
+
+def test_longer_alias_wins_over_the_bare_surname():
+    """Regression: 'Watkins 8' counted once as itself, not also as 'Watkins'."""
+    specific = make_player(1, "Watkins 8", second_name="Watkins")
+    other = make_player(2, "Watkins 3", second_name="Watkins")
+    specific.selected_by = other.selected_by = 5.0
+    thread = make_thread(selftext="Watkins 8 is essential")
+    buzz = extract_player_buzz([score_thread(thread)], [specific, other])
+    assert list(buzz) == [1]
+    assert buzz[1].mentions == 1        # not 2
+
+
+def test_unique_web_name_still_resolves_when_surname_is_shared():
+    a = make_player(1, "Watkins 8", second_name="Watkins")
+    b = make_player(2, "Watkins 3", second_name="Watkins")
+    a.selected_by = b.selected_by = 5.0
+    thread = make_thread(selftext="Watkins 3 hauled again, he is elite")
+    buzz = extract_player_buzz([score_thread(thread)], [a, b])
+    assert list(buzz) == [2]
+    assert buzz[2].sentiment > 0
+
+
+def test_full_name_disambiguates_a_shared_surname():
+    a = make_player(1, "B.Silva", second_name="Silva", first_name="Bernardo")
+    b = make_player(2, "T.Silva", second_name="Silva", first_name="Thiago")
+    a.selected_by = b.selected_by = 8.0
+    thread = make_thread(selftext="Bernardo Silva is essential")
+    buzz = extract_player_buzz([score_thread(thread)], [a, b])
+    assert list(buzz) == [1]

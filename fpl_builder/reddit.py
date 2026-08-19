@@ -360,7 +360,7 @@ def gather_threads(
 
 
 def _build_alias_index(players: Iterable) -> dict:
-    """Map lowercase alias -> list of player ids, skipping useless aliases."""
+    """Map lowercase alias -> set of candidate player ids."""
     index: dict = {}
     for player in players:
         aliases = {player.web_name, player.second_name, player.full_name}
@@ -368,6 +368,47 @@ def _build_alias_index(players: Iterable) -> dict:
         for alias in aliases:
             index.setdefault(alias.lower(), set()).add(player.id)
     return index
+
+
+def _resolve_alias(candidate_ids: set, by_id: dict) -> Optional[int]:
+    """Pick which player an alias refers to, or None if it is too ambiguous.
+
+    Surnames are routinely shared -- several players are called "Silva" -- so
+    crediting every candidate would wildly inflate their buzz. Prefer the one
+    player who actually features; if several do, accept the clearly dominant
+    pick by ownership and otherwise decline to guess.
+    """
+    if len(candidate_ids) == 1:
+        return next(iter(candidate_ids))
+
+    candidates = [by_id[i] for i in candidate_ids if i in by_id]
+    if not candidates:
+        return None
+
+    playing = [p for p in candidates if p.minutes > 0] or candidates
+    if len(playing) == 1:
+        return playing[0].id
+
+    playing.sort(key=lambda p: (-p.selected_by, -p.total_points))
+    runner_up = max(playing[1].selected_by, 0.1)
+    if playing[0].selected_by >= 3 * runner_up:
+        return playing[0].id
+    return None
+
+
+def _dedupe_overlaps(matches: list) -> list:
+    """Keep the longest match at each position.
+
+    "Watkins 8" must count once as that player, not also as a bare "Watkins".
+    """
+    accepted: list = []
+    occupied: list = []
+    for start, end, alias, text in sorted(matches, key=lambda m: -(m[1] - m[0])):
+        if any(start < o_end and end > o_start for o_start, o_end in occupied):
+            continue
+        occupied.append((start, end))
+        accepted.append((alias, text))
+    return accepted
 
 
 def _split_sentences(text: str) -> list:
@@ -388,13 +429,17 @@ def extract_player_buzz(
     players = list(players)
     by_id = {p.id: p for p in players}
     alias_index = _build_alias_index(players)
+
+    # Resolve each alias to at most one player up front; drop the hopeless ones.
+    alias_owner = {
+        alias: _resolve_alias(ids, by_id) for alias, ids in alias_index.items()
+    }
+    alias_owner = {alias: pid for alias, pid in alias_owner.items() if pid is not None}
     buzz: dict = {}
 
-    # Longest aliases first so "Bruno Fernandes" wins over "Fernandes".
-    aliases = sorted(alias_index, key=len, reverse=True)
     patterns = [
         (alias, re.compile(rf"(?<![\w']){re.escape(alias)}(?![\w'])", re.I))
-        for alias in aliases
+        for alias in alias_owner
     ]
 
     for thread in threads:
@@ -409,30 +454,29 @@ def extract_player_buzz(
             positives = sum(1 for term in POSITIVE_TERMS if term in lowered)
             negatives = sum(1 for term in NEGATIVE_TERMS if term in lowered)
 
+            spans = []
             for alias, pattern in patterns:
-                matches = list(pattern.finditer(sentence))
-                if not matches:
-                    continue
-                if alias in AMBIGUOUS_NAMES:
-                    # Require the capitalised form to avoid ordinary-word collisions.
-                    matches = [m for m in matches if m.group(0)[0].isupper()]
-                    if not matches:
+                for match in pattern.finditer(sentence):
+                    if alias in AMBIGUOUS_NAMES and not match.group(0)[0].isupper():
+                        # Ordinary-word collision: "his price is rising" is not Rice.
                         continue
+                    spans.append((match.start(), match.end(), alias, match.group(0)))
 
-                for player_id in alias_index[alias]:
-                    player = by_id.get(player_id)
-                    if player is None:
-                        continue
-                    entry = buzz.setdefault(
-                        player_id, PlayerBuzz(player_id=player_id, name=player.web_name)
-                    )
-                    entry.mentions += len(matches)
-                    entry.weighted_score += len(matches) * thread_weight
-                    entry.threads.add(thread.id)
-                    entry.positive += positives
-                    entry.negative += negatives
-                    if (positives or negatives) and len(entry.quotes) < 3:
-                        entry.quotes.append(" ".join(sentence.split())[:200])
+            for alias, _text in _dedupe_overlaps(spans):
+                player_id = alias_owner[alias]
+                player = by_id.get(player_id)
+                if player is None:
+                    continue
+                entry = buzz.setdefault(
+                    player_id, PlayerBuzz(player_id=player_id, name=player.web_name)
+                )
+                entry.mentions += 1
+                entry.weighted_score += thread_weight
+                entry.threads.add(thread.id)
+                entry.positive += positives
+                entry.negative += negatives
+                if (positives or negatives) and len(entry.quotes) < 3:
+                    entry.quotes.append(" ".join(sentence.split())[:200])
 
     for entry in buzz.values():
         entry.weighted_score = round(entry.weighted_score, 2)
