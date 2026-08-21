@@ -277,6 +277,8 @@ def cmd_team(args) -> int:
 
     squad = build_squad_object(current)
     print(report.format_squad(squad, data, config.horizon))
+    if args.show_fixtures:
+        print(report.format_squad_fixtures(squad, data, start_gw, config.horizon))
 
     if args.diagnose:
         diagnosis = diagnose_squad(
@@ -489,6 +491,8 @@ def build_parser() -> argparse.ArgumentParser:
                       help="money in the bank, in millions, when using --picks")
     team.add_argument("--picks-gw", type=int, default=None,
                       help="gameweek to read picks from (default: current)")
+    team.add_argument("--show-fixtures", action="store_true",
+                      help="show each pick's upcoming opponents")
     team.add_argument("--diagnose", action="store_true",
                       help="explain what is wrong with the squad and compare it to the optimal one")
     team.add_argument("--max-per-team", type=int, default=3, help="club limit (default: 3)")
