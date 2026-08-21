@@ -1,0 +1,53 @@
+name: connectivity probe
+
+# Temporary: checks whether the FPL API and Reddit are reachable from a
+# cloud runner, which is what a Codespace or a web Claude Code session uses.
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]" --quiet
+      - name: Probe endpoints
+        run: |
+          python - <<'PY'
+          import json, urllib.request, urllib.error
+
+          HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                                   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36",
+                     "Accept": "application/json"}
+
+          for label, url in [
+              ("FPL bootstrap-static", "https://fantasy.premierleague.com/api/bootstrap-static/"),
+              ("FPL fixtures",         "https://fantasy.premierleague.com/api/fixtures/"),
+              ("FPL entry 449725",     "https://fantasy.premierleague.com/api/entry/449725/"),
+              ("Reddit r/FantasyPL",   "https://www.reddit.com/r/FantasyPL/hot.json"),
+          ]:
+              try:
+                  r = urllib.request.urlopen(urllib.request.Request(url, headers=HEADERS), timeout=30)
+                  body = r.read()
+                  extra = ""
+                  try:
+                      d = json.loads(body)
+                      if isinstance(d, dict) and "elements" in d:
+                          extra = f" ({len(d['elements'])} players)"
+                      elif isinstance(d, list):
+                          extra = f" ({len(d)} items)"
+                  except Exception:
+                      pass
+                  print(f"OK    {r.status}  {label}{extra}")
+              except urllib.error.HTTPError as e:
+                  print(f"HTTP  {e.code}  {label}")
+              except Exception as e:
+                  print(f"FAIL       {label}: {type(e).__name__} {e}")
+          PY
+      - name: Real build on cloud runner
+        run: fpl-agent build --horizon 6 --no-reddit 2>&1 | head -20
+      - name: Test suite on Linux
+        run: python -m pytest -q 2>&1 | tail -5
