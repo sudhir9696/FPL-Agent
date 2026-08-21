@@ -96,6 +96,7 @@ past your free transfers must beat its own −4 hit to be suggested.
 --exclude "Son"              # keep players out
 --max-per-team 3             # club limit
 -o report.md                 # write a full Markdown report
+--show-fixtures              # each pick's opponents + the club fixture run
 --no-reddit                  # skip community analysis
 --weight-model 0.8 --weight-form 0.1 --weight-ep 0.1   # retune the blend
 ```

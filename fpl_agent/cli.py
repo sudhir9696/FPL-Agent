@@ -142,6 +142,9 @@ def cmd_build(args) -> int:
     cross = cross_reference(projections, buzz) if buzz else {}
 
     print(report.format_squad(squad, data, config.horizon))
+    if args.show_fixtures:
+        print(report.format_squad_fixtures(squad, data, start_gw, config.horizon))
+        print(report.format_team_fixture_ease(data, start_gw, config.horizon))
     if threads:
         print(report.format_threads(threads))
     if buzz:
@@ -423,6 +426,8 @@ def build_parser() -> argparse.ArgumentParser:
     build.add_argument("--max-per-team", type=int, default=3, help="club limit (default: 3)")
     build.add_argument("--bench-weight", type=float, default=0.12,
                        help="how much bench points count toward the objective")
+    build.add_argument("--show-fixtures", action="store_true",
+                       help="show each pick's upcoming opponents and the club fixture run")
     build.add_argument("--lock", nargs="+", default=[],
                        help="players who must be in the squad (name or id)")
     build.add_argument("--exclude", nargs="+", default=[],
