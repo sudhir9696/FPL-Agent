@@ -158,19 +158,28 @@ def ownership_table(
 
 
 def compare_to_league(
-    my_entry: LeagueEntry, rows: Iterable[OwnershipRow], min_rival_ownership: float = 40.0
+    my_entry: LeagueEntry,
+    rows: Iterable[OwnershipRow],
+    min_rival_ownership: float = 40.0,
+    max_differential_ownership: float = 30.0,
 ) -> dict:
     """Position one squad against the rest of the league.
 
     * `my_differentials` - you own them, most rivals do not
     * `my_risks`         - most rivals own them, you do not
     * `shared_template`  - you and most of the league both own them
+
+    The two thresholds are independent on purpose. A differential has to be
+    genuinely rare in the league to move you up it -- deriving the cutoff from
+    `min_rival_ownership` would call a player owned by 60% of your rivals an
+    edge, and land them in `shared_template` at the same time.
     """
     mine = set(my_entry.picks)
     rows = list(rows)
 
     differentials = [
-        r for r in rows if r.player_id in mine and r.league_ownership <= 100 - min_rival_ownership
+        r for r in rows
+        if r.player_id in mine and r.league_ownership <= max_differential_ownership
     ]
     risks = [
         r for r in rows

@@ -209,8 +209,20 @@ class GameData:
                 return event["id"]
         return self.current_gameweek
 
+    @property
+    def season_started(self) -> bool:
+        """True once any match has kicked off.
+
+        This is the moment the API resets every player's `minutes`, `starts`
+        and `total_points` to the new season, so it decides whether those
+        totals should be read against this season or the last one.
+        """
+        return any(f.started for f in self.fixtures)
+
     def team_games_played(self, team_id: int) -> int:
-        return sum(1 for f in self.fixtures if f.finished and f.involves(team_id))
+        """Matches this team has begun -- in progress counts, since those
+        minutes are already in the player totals."""
+        return sum(1 for f in self.fixtures if f.started and f.involves(team_id))
 
     def upcoming_fixtures(self, team_id: int, start_gw: int, horizon: int) -> list:
         """Fixtures for a team across [start_gw, start_gw+horizon), blanks and
