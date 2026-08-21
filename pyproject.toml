@@ -3,7 +3,7 @@ requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fpl-team-builder"
+name = "fpl-agent"
 version = "0.1.0"
 description = "Build a Fantasy Premier League squad from the public FPL API, with r/FantasyPL sentiment analysis"
 readme = "README.md"
@@ -17,10 +17,10 @@ solver = ["pulp>=2.7"]
 dev = ["pytest>=7.0", "pulp>=2.7"]
 
 [project.scripts]
-fpl-builder = "fpl_builder.cli:main"
+fpl-agent = "fpl_agent.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["fpl_builder*"]
+include = ["fpl_agent*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

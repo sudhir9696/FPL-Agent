@@ -45,7 +45,7 @@ class FPLClient:
         timeout: int = 30,
         session: Optional[requests.Session] = None,
     ) -> None:
-        self.cache_dir = Path(cache_dir) if cache_dir else Path.home() / ".cache" / "fpl_builder"
+        self.cache_dir = Path(cache_dir) if cache_dir else Path.home() / ".cache" / "fpl_agent"
         self.cache_ttl = cache_ttl
         self.timeout = timeout
         self.session = session or requests.Session()

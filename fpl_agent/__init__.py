@@ -1,4 +1,4 @@
-"""fpl_builder -- build an FPL squad from the public API plus Reddit sentiment."""
+"""fpl_agent -- build an FPL squad from the public API plus Reddit sentiment."""
 
 from .analysis import ModelConfig, ProjectionModel, best_value, differentials, top_by_position
 from .api import FPLClient, FPLError, GameData

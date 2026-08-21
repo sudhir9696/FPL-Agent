@@ -5,8 +5,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from fpl_builder.analysis import ModelConfig, ProjectionModel
-from fpl_builder.api import GameData
+from fpl_agent.analysis import ModelConfig, ProjectionModel
+from fpl_agent.api import GameData
 
 FIXTURES = Path(__file__).parent / "fixtures"
 

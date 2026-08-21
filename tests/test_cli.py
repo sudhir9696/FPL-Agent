@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from fpl_builder.cli import main
+from fpl_agent.cli import main
 
 FIXTURES = Path(__file__).parent / "fixtures"
 OFFLINE = ["--data-dir", str(FIXTURES), "--no-reddit"]

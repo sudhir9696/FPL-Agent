@@ -3,7 +3,7 @@ import json
 import pytest
 import requests
 
-from fpl_builder.api import FPLClient, FPLError, GameData
+from fpl_agent.api import FPLClient, FPLError, GameData
 
 
 class FakeResponse:

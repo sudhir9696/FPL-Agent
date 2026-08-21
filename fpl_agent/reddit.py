@@ -26,7 +26,7 @@ OAUTH_BASE = "https://oauth.reddit.com"
 DEFAULT_SUBREDDITS = ("FantasyPL",)
 
 # Reddit requires a descriptive, unique User-Agent.
-USER_AGENT = "python:fpl-team-builder:0.1 (by /u/fpl-team-builder)"
+USER_AGENT = "python:fpl-agent:0.1 (by /u/fpl-agent)"
 
 # Threads matching these carry the most decision-relevant discussion.
 NOTEWORTHY_PATTERNS = [
@@ -164,7 +164,7 @@ class RedditClient:
         self.session.headers.update({"User-Agent": user_agent, "Accept": "application/json"})
         self.timeout = timeout
         self.cache_ttl = cache_ttl
-        self.cache_dir = Path(cache_dir) if cache_dir else Path.home() / ".cache" / "fpl_builder" / "reddit"
+        self.cache_dir = Path(cache_dir) if cache_dir else Path.home() / ".cache" / "fpl_agent" / "reddit"
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.client_id = client_id or os.environ.get("REDDIT_CLIENT_ID")
         self.client_secret = client_secret or os.environ.get("REDDIT_CLIENT_SECRET")

@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pytest
 
-from fpl_builder import cli
-from fpl_builder.api import FPLError
-from fpl_builder.league import (
+from fpl_agent import cli
+from fpl_agent.api import FPLError
+from fpl_agent.league import (
     LeagueEntry, compare_to_league, find_entry, load_picks, ownership_table,
 )
 

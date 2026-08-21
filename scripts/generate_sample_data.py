@@ -15,11 +15,26 @@ Usage:  python scripts/generate_sample_data.py [output_dir]
 from __future__ import annotations
 
 import json
+import math
 import random
 import sys
 from pathlib import Path
 
 SEED = 20250819
+
+
+def _poisson_at_least(k: int, lam: float) -> float:
+    """P(X >= k) for X ~ Poisson(lam)."""
+    if k <= 0:
+        return 1.0
+    if lam <= 0:
+        return 0.0
+    term = math.exp(-lam)
+    cumulative = term
+    for i in range(1, k):
+        term *= lam / i
+        cumulative += term
+    return max(0.0, min(1.0, 1.0 - cumulative))
 
 TEAMS = [
     ("Arsenal", "ARS", 5), ("Aston Villa", "AVL", 4), ("Bournemouth", "BOU", 3),
@@ -147,8 +162,18 @@ def build_dataset(seed: int = SEED) -> tuple:
                 clean_sheets = int(round(nineties * max(0.0, 0.42 - xgc90 * 0.12)))
 
                 saves = int(nineties * rng.uniform(2.2, 4.0)) if element_type == 1 else 0
-                defcon_rate = {1: 0.0, 2: 0.55, 3: 0.28, 4: 0.08}[element_type]
-                defensive_contribution = round(nineties * defcon_rate * rng.uniform(0.6, 1.4), 1)
+                # As in the real API, this is a count of defensive ACTIONS
+                # (clearances, blocks, interceptions, tackles), not of awards
+                # won. Rates are the league medians per 90 by position.
+                defcon_rate = {1: 0.0, 2: 7.7, 3: 8.0, 4: 4.5}[element_type]
+                defcon_per90 = defcon_rate * rng.uniform(0.6, 1.4)
+                defensive_contribution = round(nineties * defcon_per90, 1)
+                # An award needs 10 actions in a match for a defender, 12 for
+                # everyone else; approximate how often that threshold was met.
+                defcon_threshold = {1: 999, 2: 10, 3: 12, 4: 12}[element_type]
+                defcon_awards = int(round(
+                    starts * _poisson_at_least(defcon_threshold, defcon_per90)
+                ))
 
                 points = (
                     starts * 2
@@ -156,7 +181,7 @@ def build_dataset(seed: int = SEED) -> tuple:
                     + assists * 3
                     + clean_sheets * {1: 4, 2: 4, 3: 1, 4: 0}[element_type]
                     + saves // 3
-                    + int(defensive_contribution) * 2
+                    + defcon_awards * 2
                 )
                 points = max(0, points + rng.randint(-3, 6))
                 bonus = max(0, int(points * rng.uniform(0.05, 0.16)))

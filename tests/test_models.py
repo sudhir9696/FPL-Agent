@@ -1,4 +1,4 @@
-from fpl_builder.models import Player, Team, Fixture
+from fpl_agent.models import Player, Team, Fixture
 
 
 RAW_PLAYER = {

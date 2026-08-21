@@ -23,6 +23,11 @@ DEFCON_POINTS = 2
 # Threshold of defensive actions needed for the defensive contribution point.
 DEFCON_THRESHOLD = {"GK": 999, "DEF": 10, "MID": 12, "FWD": 12}
 
+# Mapping from the API's 1-5 pre-season strength tiers onto the ~880-1320
+# scale the granular in-season attack/defence ratings use.
+TIER_BASE_STRENGTH = 1100
+TIER_STRENGTH_STEP = 110
+
 # Availability flags used by the API's `status` field.
 STATUS_AVAILABILITY = {
     "a": 1.0,   # available
@@ -61,15 +66,28 @@ class Team:
 
     @classmethod
     def from_api(cls, raw: dict) -> "Team":
+        # Before the season starts the API zeroes the granular attack/defence
+        # ratings and publishes only `strength_overall_*` on a 1-5 tier scale.
+        # Project those tiers onto the in-season scale so fixture difficulty
+        # still works in pre-season; a tier tells us how good a side is, not
+        # how that quality splits between attack and defence, so both derive
+        # from the same number.
+        def rating(key: str, tier_key: str) -> int:
+            value = _i(raw.get(key))
+            if value > 0:
+                return value
+            tier = _f(raw.get(tier_key), 3.0) or 3.0
+            return int(TIER_BASE_STRENGTH + (tier - 3.0) * TIER_STRENGTH_STEP)
+
         return cls(
             id=raw["id"],
             name=raw["name"],
             short_name=raw["short_name"],
-            strength=_i(raw.get("strength"), 3),
-            strength_attack_home=_i(raw.get("strength_attack_home"), 1100),
-            strength_attack_away=_i(raw.get("strength_attack_away"), 1100),
-            strength_defence_home=_i(raw.get("strength_defence_home"), 1100),
-            strength_defence_away=_i(raw.get("strength_defence_away"), 1100),
+            strength=_i(raw.get("strength"), 3) or 3,
+            strength_attack_home=rating("strength_attack_home", "strength_overall_home"),
+            strength_attack_away=rating("strength_attack_away", "strength_overall_away"),
+            strength_defence_home=rating("strength_defence_home", "strength_overall_home"),
+            strength_defence_away=rating("strength_defence_away", "strength_overall_away"),
         )
 
     def attack_strength(self, home: bool) -> float:
@@ -151,6 +169,7 @@ class Player:
     news: str = ""
     transfers_in_event: int = 0
     transfers_out_event: int = 0
+    penalties_order: Optional[int] = None   # 1 = first-choice penalty taker
 
     @property
     def full_name(self) -> str:
@@ -190,6 +209,7 @@ class Player:
             news=raw.get("news", "") or "",
             transfers_in_event=_i(raw.get("transfers_in_event")),
             transfers_out_event=_i(raw.get("transfers_out_event")),
+            penalties_order=raw.get("penalties_order"),
         )
 
     # --- per-90 rates -------------------------------------------------

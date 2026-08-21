@@ -4,8 +4,8 @@ import time
 import pytest
 import requests
 
-from fpl_builder.models import Player
-from fpl_builder.reddit import (
+from fpl_agent.models import Player
+from fpl_agent.reddit import (
     RedditClient, RedditError, Thread, cross_reference, extract_player_buzz,
     gather_threads, score_thread,
 )
