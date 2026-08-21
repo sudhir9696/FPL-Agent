@@ -112,3 +112,22 @@ def test_team_command_surfaces_api_errors(monkeypatch, capsys, tmp_path):
     ])
     assert code == 1
     assert "blocked by proxy" in capsys.readouterr().err
+
+
+def test_team_diagnose_flag_prints_findings(fake_entry, capsys, tmp_path):
+    code = cli.main([
+        "team", "1234567", "--data-dir", str(FIXTURES), "--no-reddit",
+        "--cache-dir", str(tmp_path), "--diagnose",
+    ])
+    assert code == 0
+    out = capsys.readouterr().out
+    assert "WHAT'S WRONG WITH THIS TEAM" in out
+    assert "VS OPTIMAL SQUAD" in out
+
+
+def test_team_without_diagnose_omits_the_section(fake_entry, capsys, tmp_path):
+    cli.main([
+        "team", "1234567", "--data-dir", str(FIXTURES), "--no-reddit",
+        "--cache-dir", str(tmp_path),
+    ])
+    assert "WHAT'S WRONG WITH THIS TEAM" not in capsys.readouterr().out

@@ -68,7 +68,7 @@ https://fantasy.premierleague.com/entry/1234567/event/13
 Then:
 
 ```bash
-fpl-agent team 1234567 --horizon 5 --free-transfers 1
+fpl-agent team 1234567 --horizon 5 --free-transfers 1 --diagnose
 ```
 
 That prints your current XI and bench with a projection for each player, flags
@@ -99,6 +99,23 @@ past your free transfers must beat its own −4 hit to be suggested.
 --no-reddit                  # skip community analysis
 --weight-model 0.8 --weight-form 0.1 --weight-ep 0.1   # retune the blend
 ```
+
+### What's wrong with my team
+
+```bash
+fpl-agent team 1234567 --diagnose
+```
+
+Transfer suggestions say *what to do*; `--diagnose` says *why*. It reports
+ranked findings — players who cannot play, starters who are not nailed, blanks,
+a captain who is not your best projected starter, money idle on the bench or in
+the bank, club concentration — and then diffs your squad against the optimal one
+at your budget, listing your weakest links and what you are missing.
+
+The points gap it quotes is an upper bound nobody reaches: it assumes perfect
+foresight of the model's own projections. Treat the ranking of the findings as
+the signal, not the absolute number.
+
 
 ## Mini-league analysis
 
@@ -266,7 +283,7 @@ data). `--refresh` forces a refetch.
 python -m pytest -q
 ```
 
-139 tests cover parsing, the projection maths, squad legality under every
+152 tests cover parsing, the projection maths, squad legality under every
 constraint, ILP-vs-heuristic optimality, Reddit parsing and sentiment scoping,
 league ownership maths, and end-to-end CLI runs. They use a generated dataset that mirrors the real API
 schema, so the suite runs with no network access:

@@ -430,3 +430,62 @@ def format_league_comparison(comparison: dict, team_name: str) -> str:
                 f"{row.global_ownership:.1f}% globally, {row.expected_points:.1f} xPTS"
             )
     return "\n".join(lines)
+
+
+SEVERITY_LABEL = {
+    "critical": "CRITICAL",
+    "high": "HIGH",
+    "medium": "MEDIUM",
+    "low": "LOW",
+}
+
+
+def format_diagnosis(diagnosis: dict, data, horizon: int) -> str:
+    """Render the "what is wrong with my team" findings."""
+    findings = diagnosis.get("findings") or []
+    lines = ["", "=" * 78, "WHAT'S WRONG WITH THIS TEAM", "=" * 78]
+
+    if not findings:
+        lines.append("\n  Nothing flagged. Squad is available, nailed and fully invested.")
+        return "\n".join(lines)
+
+    for i, finding in enumerate(findings, start=1):
+        label = SEVERITY_LABEL.get(finding.severity, finding.severity.upper())
+        header = f"\n{i}. [{label}] {finding.title}"
+        if finding.cost:
+            header += f"  (~{finding.cost:.1f} pts)"
+        lines.append(header)
+        lines.append(f"   {finding.detail}")
+        for player in finding.players:
+            lines.append(f"     - {player}")
+
+    comparison = diagnosis.get("comparison") or {}
+    if comparison:
+        lines.append("")
+        lines.append("-" * 78)
+        lines.append(
+            f"VS OPTIMAL SQUAD  |  {comparison['overlap']}/15 shared  |  "
+            f"gap {comparison['points_gap']:+.1f} pts over {horizon} GW(s)"
+        )
+        lines.append("-" * 78)
+
+        drop, add = comparison.get("drop") or [], comparison.get("add") or []
+        if drop:
+            lines.append("\n  Weakest links (you hold, the optimal squad does not):")
+            for projection in drop[:8]:
+                lines.append(
+                    f"    - {projection.player.web_name} "
+                    f"({projection.player.position}, {projection.player.cost:.1f}m): "
+                    f"{projection.expected_points:.1f} xPTS, "
+                    f"starts ~{projection.start_probability:.0%}"
+                )
+        if add:
+            lines.append("\n  Missing (optimal squad holds, you do not):")
+            for projection in add[:8]:
+                lines.append(
+                    f"    + {projection.player.web_name} "
+                    f"({projection.player.position}, {projection.player.cost:.1f}m): "
+                    f"{projection.expected_points:.1f} xPTS, "
+                    f"starts ~{projection.start_probability:.0%}"
+                )
+    return "\n".join(lines)

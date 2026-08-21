@@ -16,6 +16,7 @@ from .league import (
     LeagueEntry, compare_to_league, find_entry, load_picks, ownership_table,
 )
 from .models import POSITIONS
+from .diagnose import diagnose_squad
 from .optimizer import OptimizerError, build_squad_object, optimize_squad, suggest_transfers
 from .reddit import RedditClient, RedditError, cross_reference, extract_player_buzz, gather_threads
 
@@ -259,6 +260,13 @@ def cmd_team(args) -> int:
     squad = build_squad_object(current)
     print(report.format_squad(squad, data, config.horizon))
 
+    if args.diagnose:
+        diagnosis = diagnose_squad(
+            current, projections, bank=bank, horizon=config.horizon,
+            max_per_team=args.max_per_team, bench_weight=args.bench_weight,
+        )
+        print(report.format_diagnosis(diagnosis, data, config.horizon))
+
     moves = suggest_transfers(
         current, projections, bank=bank,
         free_transfers=args.free_transfers, max_transfers=args.max_transfers,
@@ -446,6 +454,11 @@ def build_parser() -> argparse.ArgumentParser:
     team.add_argument("entry", type=int, help="your FPL entry (team) id")
     team.add_argument("--picks-gw", type=int, default=None,
                       help="gameweek to read picks from (default: current)")
+    team.add_argument("--diagnose", action="store_true",
+                      help="explain what is wrong with the squad and compare it to the optimal one")
+    team.add_argument("--max-per-team", type=int, default=3, help="club limit (default: 3)")
+    team.add_argument("--bench-weight", type=float, default=0.12,
+                      help="how much bench points count when building the optimal comparison")
     team.add_argument("--free-transfers", type=int, default=1)
     team.add_argument("--max-transfers", type=int, default=3)
     team.set_defaults(func=cmd_team)
