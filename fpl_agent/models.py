@@ -107,6 +107,7 @@ class Fixture:
     team_a_difficulty: int
     finished: bool
     kickoff_time: Optional[str] = None
+    started: bool = False
 
     @classmethod
     def from_api(cls, raw: dict) -> "Fixture":
@@ -119,6 +120,9 @@ class Fixture:
             team_a_difficulty=_i(raw.get("team_a_difficulty"), 3),
             finished=bool(raw.get("finished")),
             kickoff_time=raw.get("kickoff_time"),
+            # A kicked-off match already contributes minutes to the totals, so
+            # it has to count toward the denominator even before it finishes.
+            started=bool(raw.get("started") or raw.get("finished")),
         )
 
     def involves(self, team_id: int) -> bool:
