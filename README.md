@@ -255,6 +255,32 @@ export REDDIT_CLIENT_SECRET=...
 The client then uses OAuth automatically. Or pass `--no-reddit` to skip it —
 every other feature works without Reddit.
 
+## When the FPL API is blocked
+
+Some networks — corporate proxies, sandboxed CI runners, cloud IDE sessions —
+block `fantasy.premierleague.com` outright. You do not have to give up on real
+data: [FPL Core Insights](https://github.com/olbauday/FPL-Core-Insights)
+mirrors the same dataset to GitHub as CSVs, refreshed twice daily (07:30 and
+17:30 UTC), and adds CBIT metrics, Elo ratings and set-piece order.
+
+```bash
+git clone --depth 1 https://github.com/olbauday/FPL-Core-Insights
+python scripts/import_core_insights.py FPL-Core-Insights -o fpl-data
+fpl-agent build --data-dir fpl-data --horizon 6 --no-reddit
+```
+
+The importer emits the same `bootstrap.json` / `fixtures.json` pair that
+`--data-dir` already reads, so every command works unchanged.
+
+Pre-season the current season's counting stats are all zero, so each player's
+statistical base is carried forward from the prior season, matched on the
+`player_code` that stays stable across seasons (461 of 599 players for
+2026/27). Price, ownership, availability and set-piece order always come from
+the current season. Two caveats: Core Insights publishes price in millions
+where the API uses tenths, and it carries no FDR, so fixture difficulty is
+approximated from the opponent's published strength tier.
+
+
 ## Working offline
 
 ```bash
