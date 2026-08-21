@@ -1,7 +1,7 @@
 import pytest
 
-from fpl_builder.models import SQUAD_QUOTA, XI_RANGE
-from fpl_builder.optimizer import (
+from fpl_agent.models import SQUAD_QUOTA, XI_RANGE
+from fpl_agent.optimizer import (
     OptimizerError, _filter_pool, _optimize_ilp, _optimize_local_search, _squad_objective,
     build_squad_object, optimize_squad, pick_best_xi, suggest_transfers,
 )

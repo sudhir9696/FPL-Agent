@@ -2,11 +2,11 @@ import copy
 
 import pytest
 
-from fpl_builder.analysis import (
+from fpl_agent.analysis import (
     ModelConfig, ProjectionModel, _shrunk_rate, best_value, differentials, top_by_position,
 )
-from fpl_builder.api import GameData
-from fpl_builder.models import Player
+from fpl_agent.api import GameData
+from fpl_agent.models import Player
 
 
 def test_shrunk_rate_pulls_small_samples_toward_the_prior():

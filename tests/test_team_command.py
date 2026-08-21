@@ -1,11 +1,11 @@
-"""Covers `fpl-builder team <entry-id>` with the API responses mocked out."""
+"""Covers `fpl-agent team <entry-id>` with the API responses mocked out."""
 
 from pathlib import Path
 
 import pytest
 
-from fpl_builder import cli
-from fpl_builder.api import GameData
+from fpl_agent import cli
+from fpl_agent.api import GameData
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -100,7 +100,7 @@ def test_team_command_errors_when_picks_are_empty(monkeypatch, capsys, tmp_path)
 
 
 def test_team_command_surfaces_api_errors(monkeypatch, capsys, tmp_path):
-    from fpl_builder.api import FPLError
+    from fpl_agent.api import FPLError
 
     def boom(self, eid, use_cache=True):
         raise FPLError("blocked by proxy")

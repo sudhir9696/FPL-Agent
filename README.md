@@ -1,4 +1,4 @@
-# FPL Team Builder
+# FPL Agent
 
 Build and analyse a Fantasy Premier League squad from the **public FPL API**,
 cross-referenced against **r/FantasyPL** discussion.
@@ -26,7 +26,7 @@ public JSON the official web app calls.
 ## Install
 
 ```bash
-git clone <this repo> && cd fpl-team-builder
+git clone <this repo> && cd fpl-agent
 pip install -e ".[dev]"
 ```
 
@@ -37,23 +37,23 @@ squad is provably optimal; without it a local search runs instead.
 
 ```bash
 # Build the best squad for the next 5 gameweeks
-fpl-builder build
+fpl-agent build
 
 # Analyse YOUR team and get transfer suggestions
-fpl-builder team 1234567
+fpl-agent team 1234567
 
 # Rank players
-fpl-builder players --position MID --limit 20
-fpl-builder players --sort value --max-price 6.0
+fpl-agent players --position MID --limit 20
+fpl-agent players --sort value --max-price 6.0
 
 # Reddit digest on its own
-fpl-builder reddit
+fpl-agent reddit
 
 # Your mini-league: standings, rival ownership, your differentials
-fpl-builder league 804829 --me "DontBottleThisYear" --analyze 20
+fpl-agent league 804829 --me "DontBottleThisYear" --analyze 20
 ```
 
-Every command also runs as `python -m fpl_builder.cli ...`.
+Every command also runs as `python -m fpl_agent.cli ...`.
 
 ### Finding your entry ID
 
@@ -68,7 +68,7 @@ https://fantasy.premierleague.com/entry/1234567/event/13
 Then:
 
 ```bash
-fpl-builder team 1234567 --horizon 5 --free-transfers 1
+fpl-agent team 1234567 --horizon 5 --free-transfers 1
 ```
 
 That prints your current XI and bench with a projection for each player, flags
@@ -108,10 +108,10 @@ work league. A player owned by 4% of the world but 60% of your rivals is
 
 ```bash
 # Standings only — this is also how you find your entry ID
-fpl-builder league 804829
+fpl-agent league 804829
 
 # Pull rival squads and compare
-fpl-builder league 804829 --me "DontBottleThisYear" --analyze 20
+fpl-agent league 804829 --me "DontBottleThisYear" --analyze 20
 ```
 
 The league ID comes straight out of the league URL:
@@ -157,11 +157,40 @@ with these adjustments:
   ratings and FDR, clamped so no single fixture dominates, with a home bonus.
 - **Clean sheets are Poisson** — `P(CS) = e^(-xGC)`, where expected goals
   conceded comes from the opponent's attack against this team's defence.
+- **Defensive contribution is a threshold, not a rate.** The API's
+  `defensive_contribution` counts defensive *actions* (clearances, blocks,
+  interceptions, tackles), not awards won — the league median is about 7.7 per
+  90. An award pays 2pts once a defender reaches 10 actions in a match, or 12
+  for everyone else, so the model takes the Poisson tail `P(X >= threshold)`
+  rather than assuming anyone above one action per 90 always qualifies.
 - **Minutes drive everything.** Start probability blends start rate with minutes
   rate, multiplied by availability from `status` and `chance_of_playing`.
 - **The model is blended** with FPL's own `ep_next` and the player's `form`
   (default 60/20/20), and those anchors are themselves scaled by expected
   minutes so fringe players are not over-rated.
+
+### 2026/27 rules
+
+Bonus rates carried over from last season are rescaled for the new BPS: three
+CBI per BPS point instead of two (defenders down), three BPS for a keeper's
+save inside the box instead of two (keepers up), no penalty for being tackled
+(ball carriers up), and a flat 12 BPS for a penalty goal regardless of
+position, which costs designated takers in midfield and attack. Pass
+`--no-2627-bps` to score against the old system instead.
+
+### Running it before the season starts
+
+Pre-season the API behaves differently, and the model compensates:
+
+- `minutes` and `starts` are last season's totals while no fixture has been
+  played, so they are divided by a full 38-game season rather than by the
+  zero games played so far.
+- The granular `strength_attack_*` and `strength_defence_*` ratings are zeroed
+  and only `strength_overall_home`/`_away` is published, on a 1-5 tier scale.
+  Those tiers are projected onto the in-season scale so fixture difficulty
+  still works.
+- `form` is 0.0 for every player, so its weight is redistributed to the model
+  and `ep_next` instead of silently discounting every projection.
 
 Tune the blend with `--weight-model`, `--weight-form` and `--weight-ep`.
 
@@ -212,8 +241,8 @@ every other feature works without Reddit.
 ## Working offline
 
 ```bash
-fpl-builder fetch --data-dir fpl-data      # save the API payloads
-fpl-builder build --data-dir fpl-data      # replay with no network
+fpl-agent fetch --data-dir fpl-data      # save the API payloads
+fpl-agent build --data-dir fpl-data      # replay with no network
 ```
 
 Responses are cached for an hour by default (60 seconds for live gameweek

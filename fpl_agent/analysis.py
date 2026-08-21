@@ -15,6 +15,7 @@ and the player's `form` as external anchors.
 
 from __future__ import annotations
 
+import logging
 import math
 from dataclasses import dataclass
 from typing import Iterable, Optional
@@ -24,12 +25,15 @@ from .models import (
     ASSIST_POINTS,
     CLEAN_SHEET_POINTS,
     DEFCON_POINTS,
+    DEFCON_THRESHOLD,
     GOAL_POINTS,
     Fixture,
     Player,
     Projection,
     Team,
 )
+
+log = logging.getLogger(__name__)
 
 # Average goals scored by one team in a Premier League match.
 LEAGUE_AVG_GOALS = 1.42
@@ -38,12 +42,46 @@ LEAGUE_AVG_GOALS = 1.42
 PRIOR_XG90 = {"GK": 0.00, "DEF": 0.05, "MID": 0.15, "FWD": 0.35}
 PRIOR_XA90 = {"GK": 0.00, "DEF": 0.06, "MID": 0.14, "FWD": 0.12}
 PRIOR_BONUS90 = {"GK": 0.18, "DEF": 0.20, "MID": 0.22, "FWD": 0.25}
-PRIOR_DEFCON90 = {"GK": 0.0, "DEF": 0.55, "MID": 0.25, "FWD": 0.08}
+# `defensive_contribution` is a count of defensive ACTIONS (CBIT), not of awards
+# won, so these priors are on the same scale as DEFCON_THRESHOLD. Values are the
+# league medians for players with 900+ minutes.
+PRIOR_DEFCON90 = {"GK": 0.0, "DEF": 7.7, "MID": 8.0, "FWD": 4.5}
 PRIOR_SAVES90 = {"GK": 3.0, "DEF": 0.0, "MID": 0.0, "FWD": 0.0}
 
 # Minutes of "prior evidence" mixed into every player's rates. Higher = more
 # regression to the positional mean.
 PRIOR_MINUTES = 270.0
+
+# A start is not 90 minutes; defensive actions accrue only while on the pitch.
+MINUTES_PER_START = 0.90
+
+# 2026/27 BPS recalibration, applied to bonus rates carried over from 2025/26:
+#   * defenders need 3 CBI per BPS point, up from 2               -> DEF down
+#   * goalkeepers earn 3 BPS for a save inside the box, up from 2 -> GK up
+#   * players are no longer docked a BPS point for being tackled  -> carriers up
+BPS_2627_ADJUSTMENT = {"GK": 1.08, "DEF": 0.88, "MID": 1.03, "FWD": 1.03}
+# Penalty goals now score a flat 12 BPS regardless of position, replacing the
+# 18 (MID) / 24 (FWD) a goal used to be worth. Designated takers in those
+# positions therefore convert the same goals into less bonus.
+PENALTY_TAKER_BPS_ADJUSTMENT = {"GK": 1.0, "DEF": 1.0, "MID": 0.90, "FWD": 0.88}
+
+# Games in a full Premier League season, used as the pre-season denominator for
+# minutes rates when no fixture has been played yet.
+FULL_SEASON_GAMES = 38
+
+
+def _poisson_at_least(k: int, lam: float) -> float:
+    """P(X >= k) for X ~ Poisson(lam)."""
+    if k <= 0:
+        return 1.0
+    if lam <= 0:
+        return 0.0
+    term = math.exp(-lam)
+    cumulative = term
+    for i in range(1, k):
+        term *= lam / i
+        cumulative += term
+    return _clamp(1.0 - cumulative, 0.0, 1.0)
 
 
 @dataclass
@@ -59,6 +97,7 @@ class ModelConfig:
     max_fixture_swing: float = 1.75  # clamp on fixture multipliers
     prior_minutes: float = PRIOR_MINUTES
     include_defcon: bool = True      # 2025/26 defensive contribution points
+    apply_2627_bps: bool = True      # 2026/27 bonus-point system recalibration
     differential_threshold: float = 5.0   # selected_by % below which = differential
     template_threshold: float = 30.0      # selected_by % above which = template
 
@@ -91,6 +130,18 @@ class ProjectionModel:
         self.data = data
         self.config = config or ModelConfig()
         self._league_avg_attack, self._league_avg_defence = self._league_averages()
+        # `form` is a rolling 30-day average, so it is zero for everyone until
+        # the season starts. Keeping weight on it would silently discount every
+        # projection; hand that weight to the other two anchors instead.
+        if self.config.weight_form > 0 and not any(p.form > 0 for p in self.data.players):
+            cfg = self.config
+            rest = cfg.weight_model + cfg.weight_ep
+            if rest > 0:
+                scale = (rest + cfg.weight_form) / rest
+                cfg.weight_model *= scale
+                cfg.weight_ep *= scale
+            cfg.weight_form = 0.0
+            log.info("no form data yet (pre-season): reweighted to model/ep only")
 
     def _league_averages(self) -> tuple:
         teams = list(self.data.teams.values())
@@ -98,7 +149,8 @@ class ProjectionModel:
             return (1100.0, 1100.0)
         attack = sum((t.strength_attack_home + t.strength_attack_away) / 2 for t in teams)
         defence = sum((t.strength_defence_home + t.strength_defence_away) / 2 for t in teams)
-        return (attack / len(teams), defence / len(teams))
+        # Never return zero: these are divisors for every fixture multiplier.
+        return (attack / len(teams) or 1100.0, defence / len(teams) or 1100.0)
 
     # --- fixture context ----------------------------------------------
     def attack_multiplier(self, team: Team, fixture: Fixture) -> float:
@@ -143,7 +195,11 @@ class ProjectionModel:
     # --- minutes ------------------------------------------------------
     def start_probability(self, player: Player) -> float:
         """Probability the player starts a given match, 0..1."""
-        games = max(1, self.data.team_games_played(player.team))
+        played = self.data.team_games_played(player.team)
+        # Before a ball is kicked, `starts` and `minutes` are last season's
+        # totals, so they must be divided by a full season. Dividing by one
+        # game instead would rate every squad player as nailed on.
+        games = max(1, played) if played else FULL_SEASON_GAMES
         start_rate = _clamp(player.starts / games, 0.0, 1.0)
         minutes_rate = _clamp(player.minutes / (games * 90.0), 0.0, 1.0)
         # Starts are the stronger signal; minutes catch sub-heavy roles.
@@ -189,17 +245,25 @@ class ProjectionModel:
         bonus = _shrunk_rate(
             player.bonus, player.minutes, PRIOR_BONUS90[pos], cfg.prior_minutes
         )
+        if cfg.apply_2627_bps:
+            bonus *= BPS_2627_ADJUSTMENT[pos]
+            if player.penalties_order == 1:
+                bonus *= PENALTY_TAKER_BPS_ADJUSTMENT[pos]
 
         defcon = 0.0
         if cfg.include_defcon:
-            defcon_rate = _shrunk_rate(
+            # CBIT actions per 90, scaled by how much of a match a starter plays
+            # and by how much defending this fixture is likely to demand.
+            cbit_rate = _shrunk_rate(
                 player.defensive_contribution,
                 player.minutes,
                 PRIOR_DEFCON90[pos],
                 cfg.prior_minutes,
-            )
-            # At most one defensive-contribution award (2pts) per match.
-            defcon = _clamp(defcon_rate, 0.0, 1.0) * DEFCON_POINTS
+            ) * MINUTES_PER_START
+            cbit_rate *= _clamp(xgc / LEAGUE_AVG_GOALS, 0.85, 1.20)
+            # One award (2pts) per match, once the positional threshold is met.
+            threshold = DEFCON_THRESHOLD[pos]
+            defcon = _poisson_at_least(threshold, cbit_rate) * DEFCON_POINTS
 
         return {
             "attacking": attacking,

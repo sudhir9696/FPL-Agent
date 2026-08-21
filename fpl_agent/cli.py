@@ -1,4 +1,4 @@
-"""Command-line interface for the FPL team builder."""
+"""Command-line interface for the FPL Agent."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ from .models import POSITIONS
 from .optimizer import OptimizerError, build_squad_object, optimize_squad, suggest_transfers
 from .reddit import RedditClient, RedditError, cross_reference, extract_player_buzz, gather_threads
 
-log = logging.getLogger("fpl_builder")
+log = logging.getLogger("fpl_agent")
 
 
 def _add_common_args(parser: argparse.ArgumentParser) -> None:
@@ -41,6 +41,8 @@ def _add_common_args(parser: argparse.ArgumentParser) -> None:
                         help="weight on FPL's own ep_next (default: 0.20)")
     parser.add_argument("--no-defcon", action="store_true",
                         help="ignore defensive-contribution points")
+    parser.add_argument("--no-2627-bps", action="store_true",
+                        help="score bonus against the old BPS, not the 2026/27 one")
     parser.add_argument("-o", "--output", type=Path, default=None,
                         help="write a Markdown report to this path")
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose logging")
@@ -65,7 +67,7 @@ def load_game_data(args) -> GameData:
         if missing:
             raise SystemExit(
                 f"error: missing {', '.join(str(m) for m in missing)}. "
-                f"Run `fpl-builder fetch --data-dir {args.data_dir}` first."
+                f"Run `fpl-agent fetch --data-dir {args.data_dir}` first."
             )
         log.info("loading offline data from %s", args.data_dir)
         return GameData.from_files(bootstrap, fixtures)
@@ -81,6 +83,7 @@ def build_model_config(args) -> ModelConfig:
         weight_form=args.weight_form,
         weight_ep=args.weight_ep,
         include_defcon=not args.no_defcon,
+        apply_2627_bps=not getattr(args, "no_2627_bps", False),
     )
 
 
@@ -349,7 +352,7 @@ def cmd_fetch(args) -> int:
     data.save(target)
     print(f"Saved {len(data.players)} players and {len(data.fixtures)} fixtures to {target}/")
     print(f"Current GW: {data.current_gameweek}  |  Next GW: {data.next_gameweek}")
-    print(f"Replay offline with: fpl-builder build --data-dir {target}")
+    print(f"Replay offline with: fpl-agent build --data-dir {target}")
     return 0
 
 
@@ -392,13 +395,14 @@ def _maybe_write_report(args, squad, projections, data, horizon, start_gw,
     )
     path = Path(args.output)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(markdown)
+    # Player names carry accents, and Windows would otherwise use cp1252.
+    path.write_text(markdown, encoding="utf-8")
     print(f"\nMarkdown report written to {path}")
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="fpl-builder",
+        prog="fpl-agent",
         description="Build and analyse a Fantasy Premier League squad using the "
                     "public FPL API and r/FantasyPL discussion.",
     )
