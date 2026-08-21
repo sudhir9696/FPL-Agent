@@ -228,29 +228,44 @@ def cmd_team(args) -> int:
     projections = ProjectionModel(data, config).project_all(start_gw=start_gw)
     by_id = {p.player.id: p for p in projections}
 
-    client = FPLClient(cache_dir=args.cache_dir)
     picks_gw = args.picks_gw or max(1, data.current_gameweek)
-    try:
-        entry = client.entry(args.entry)
-        picks_payload = client.entry_picks(args.entry, picks_gw, use_cache=not args.refresh)
-    except FPLError as exc:
-        print(f"error: {exc}", file=sys.stderr)
-        return 1
 
-    bank = entry.get("last_deadline_bank")
-    bank = (bank / 10.0) if isinstance(bank, (int, float)) else 0.0
+    if args.picks:
+        # Squad supplied by hand -- no API call needed.
+        try:
+            # Split on commas only: names contain spaces ("Van Hecke").
+            raw = args.picks.split(",") if "," in args.picks else args.picks.split()
+            picked_ids = _resolve_players(raw, data)
+        except SystemExit as exc:
+            print(exc, file=sys.stderr)
+            return 1
+        current = [by_id[i] for i in picked_ids if i in by_id]
+        bank = args.bank
+        entry = {"name": "your squad", "player_first_name": "", "player_last_name": ""}
+    else:
+        if args.entry is None:
+            print("error: give an entry id, or pass --picks with 15 player names.",
+                  file=sys.stderr)
+            return 1
+        client = FPLClient(cache_dir=args.cache_dir)
+        try:
+            entry = client.entry(args.entry)
+            picks_payload = client.entry_picks(args.entry, picks_gw, use_cache=not args.refresh)
+        except FPLError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 1
 
-    current = []
-    for pick in picks_payload.get("picks", []):
-        projection = by_id.get(pick.get("element"))
-        if projection:
-            current.append(projection)
+        bank = entry.get("last_deadline_bank")
+        bank = (bank / 10.0) if isinstance(bank, (int, float)) else 0.0
+
+        current = []
+        for pick in picks_payload.get("picks", []):
+            projection = by_id.get(pick.get("element"))
+            if projection:
+                current.append(projection)
 
     if len(current) != 15:
-        print(
-            f"warning: resolved {len(current)}/15 picks for entry {args.entry} in GW{picks_gw}.",
-            file=sys.stderr,
-        )
+        print(f"warning: resolved {len(current)}/15 picks.", file=sys.stderr)
     if not current:
         print("error: no picks resolved -- check the entry id and gameweek.", file=sys.stderr)
         return 1
@@ -367,32 +382,40 @@ def cmd_fetch(args) -> int:
     return 0
 
 
+def _resolve_players(values, data) -> list:
+    """Turn player names or ids into player ids, preserving order."""
+    resolved = []
+    for value in values or []:
+        value = str(value).strip()
+        if not value:
+            continue
+        if value.isdigit():
+            resolved.append(int(value))
+            continue
+        needle = value.lower()
+        matches = [
+            p for p in data.players
+            if needle == p.web_name.lower() or needle in p.full_name.lower()
+        ]
+        if not matches:
+            raise SystemExit(f"error: no player matches '{value}'")
+        if len(matches) > 1:
+            exact = [p for p in matches if p.web_name.lower() == needle]
+            if len(exact) == 1:
+                matches = exact
+            else:
+                names = ", ".join(f"{p.web_name} ({p.id})" for p in matches[:8])
+                raise SystemExit(f"error: '{value}' is ambiguous -- {names}")
+        resolved.append(matches[0].id)
+    return resolved
+
+
 def _resolve_name_filters(args, data) -> tuple:
     """Turn --lock/--exclude names or ids into player ids."""
-    def resolve(values) -> set:
-        resolved = set()
-        for value in values or []:
-            if str(value).isdigit():
-                resolved.add(int(value))
-                continue
-            needle = str(value).lower()
-            matches = [
-                p for p in data.players
-                if needle == p.web_name.lower() or needle in p.full_name.lower()
-            ]
-            if not matches:
-                raise SystemExit(f"error: no player matches '{value}'")
-            if len(matches) > 1:
-                exact = [p for p in matches if p.web_name.lower() == needle]
-                if len(exact) == 1:
-                    matches = exact
-                else:
-                    names = ", ".join(f"{p.web_name} (id {p.id})" for p in matches[:8])
-                    raise SystemExit(f"error: '{value}' is ambiguous -- {names}")
-            resolved.add(matches[0].id)
-        return resolved
-
-    return resolve(getattr(args, "lock", None)), resolve(getattr(args, "exclude", None))
+    return (
+        set(_resolve_players(getattr(args, "lock", None), data)),
+        set(_resolve_players(getattr(args, "exclude", None), data)),
+    )
 
 
 def _maybe_write_report(args, squad, projections, data, horizon, start_gw,
@@ -456,7 +479,14 @@ def build_parser() -> argparse.ArgumentParser:
     team = subparsers.add_parser("team", help="analyse an existing team and suggest transfers")
     _add_common_args(team)
     _add_reddit_args(team)
-    team.add_argument("entry", type=int, help="your FPL entry (team) id")
+    team.add_argument("entry", type=int, nargs="?", default=None,
+                      help="your FPL entry (team) id (omit if using --picks)")
+    team.add_argument("--picks", default=None,
+                      help="analyse a squad given by hand instead of fetching it: 15 "
+                           "comma-separated player names or ids. Use when the FPL API "
+                           "is unreachable.")
+    team.add_argument("--bank", type=float, default=0.0,
+                      help="money in the bank, in millions, when using --picks")
     team.add_argument("--picks-gw", type=int, default=None,
                       help="gameweek to read picks from (default: current)")
     team.add_argument("--diagnose", action="store_true",

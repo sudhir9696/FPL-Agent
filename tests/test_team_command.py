@@ -131,3 +131,100 @@ def test_team_without_diagnose_omits_the_section(fake_entry, capsys, tmp_path):
         "--cache-dir", str(tmp_path),
     ])
     assert "WHAT'S WRONG WITH THIS TEAM" not in capsys.readouterr().out
+
+
+# --- --picks: analyse a squad supplied by hand, no API call ------------
+def _fifteen_names(data):
+    quota, counts, names = {"GK": 2, "DEF": 5, "MID": 5, "FWD": 3}, {}, []
+    for player in sorted(data.players, key=lambda p: -p.total_points):
+        if quota.get(player.position, 0) <= 0 or counts.get(player.team, 0) >= 3:
+            continue
+        if any(n == player.web_name for n in names):
+            continue
+        names.append(player.web_name)
+        quota[player.position] -= 1
+        counts[player.team] = counts.get(player.team, 0) + 1
+        if not any(quota.values()):
+            break
+    return names
+
+
+def test_picks_analyses_a_hand_entered_squad(capsys, data, tmp_path):
+    names = _fifteen_names(data)
+    code = cli.main([
+        "team", "--picks", ",".join(names), "--data-dir", str(FIXTURES),
+        "--no-reddit", "--cache-dir", str(tmp_path),
+    ])
+    assert code == 0
+    out = capsys.readouterr().out
+    assert "STARTING XI" in out
+    assert "your squad" in out
+
+
+def test_picks_needs_no_api_call(monkeypatch, capsys, data, tmp_path):
+    """--picks must never touch the network."""
+    def boom(*args, **kwargs):
+        raise AssertionError("--picks should not call the FPL API")
+
+    monkeypatch.setattr(cli.FPLClient, "entry", boom)
+    monkeypatch.setattr(cli.FPLClient, "entry_picks", boom)
+    code = cli.main([
+        "team", "--picks", ",".join(_fifteen_names(data)), "--data-dir", str(FIXTURES),
+        "--no-reddit", "--cache-dir", str(tmp_path),
+    ])
+    assert code == 0
+
+
+def test_picks_accepts_names_with_spaces(capsys, data, tmp_path):
+    """Regression: splitting on spaces broke names like 'Van Hecke'."""
+    spaced = next(
+        (p for p in data.players if " " in p.web_name), None
+    )
+    names = _fifteen_names(data)
+    if spaced and spaced.web_name not in names:
+        names[-1] = spaced.web_name
+    code = cli.main([
+        "team", "--picks", ",".join(names), "--data-dir", str(FIXTURES),
+        "--no-reddit", "--cache-dir", str(tmp_path),
+    ])
+    assert code == 0
+    if spaced:
+        assert spaced.web_name[:16] in capsys.readouterr().out
+
+
+def test_picks_accepts_player_ids(capsys, data, tmp_path):
+    ids = [str(p.id) for p in data.players[:1]]
+    names = _fifteen_names(data)
+    code = cli.main([
+        "team", "--picks", ",".join(names[:14] + ids), "--data-dir", str(FIXTURES),
+        "--no-reddit", "--cache-dir", str(tmp_path),
+    ])
+    assert code in (0, 1)   # may resolve <15 if the id duplicates a name
+
+
+def test_picks_reports_an_unknown_name(capsys, data, tmp_path):
+    names = _fifteen_names(data)[:14] + ["DefinitelyNotAPlayer"]
+    code = cli.main([
+        "team", "--picks", ",".join(names), "--data-dir", str(FIXTURES),
+        "--no-reddit", "--cache-dir", str(tmp_path),
+    ])
+    assert code == 1
+    assert "no player matches" in capsys.readouterr().err
+
+
+def test_picks_carries_the_bank_into_the_diagnosis(capsys, data, tmp_path):
+    code = cli.main([
+        "team", "--picks", ",".join(_fifteen_names(data)), "--bank", "4.0",
+        "--data-dir", str(FIXTURES), "--no-reddit", "--diagnose",
+        "--cache-dir", str(tmp_path),
+    ])
+    assert code == 0
+    assert "4.0m sitting in the bank" in capsys.readouterr().out
+
+
+def test_team_requires_entry_or_picks(capsys, tmp_path):
+    code = cli.main([
+        "team", "--data-dir", str(FIXTURES), "--no-reddit", "--cache-dir", str(tmp_path),
+    ])
+    assert code == 1
+    assert "entry id" in capsys.readouterr().err

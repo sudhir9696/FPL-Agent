@@ -101,6 +101,20 @@ past your free transfers must beat its own −4 hit to be suggested.
 --weight-model 0.8 --weight-form 0.1 --weight-ep 0.1   # retune the blend
 ```
 
+### Analysing a squad without API access
+
+If `fantasy.premierleague.com` is unreachable, you can hand the tool your 15
+players directly — no entry id, no network call:
+
+```bash
+fpl-agent team --picks "Raya,Virgil,Senesi,B.Fernandes,Enzo,..." \
+  --bank 0.5 --data-dir fpl-data --diagnose --no-reddit
+```
+
+Names are matched against web names and full names; ids work too. Separate with
+commas, since names contain spaces.
+
+
 ### What's wrong with my team
 
 ```bash
@@ -310,7 +324,7 @@ data). `--refresh` forces a refetch.
 python -m pytest -q
 ```
 
-152 tests cover parsing, the projection maths, squad legality under every
+159 tests cover parsing, the projection maths, squad legality under every
 constraint, ILP-vs-heuristic optimality, Reddit parsing and sentiment scoping,
 league ownership maths, and end-to-end CLI runs. They use a generated dataset that mirrors the real API
 schema, so the suite runs with no network access:
