@@ -22,6 +22,9 @@ fpl-agent = "fpl_agent.cli:main"
 [tool.setuptools.packages.find]
 include = ["fpl_agent*"]
 
+[tool.setuptools.package-data]
+fpl_agent = ["data/*.json"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 filterwarnings = ["ignore::DeprecationWarning"]

@@ -21,6 +21,7 @@ from dataclasses import dataclass
 from typing import Iterable, Optional
 
 from .api import GameData
+from .european import EuropeanCalendar, parse_kickoff
 from .models import (
     ASSIST_POINTS,
     CLEAN_SHEET_POINTS,
@@ -130,9 +131,15 @@ def _clamp(value: float, low: float, high: float) -> float:
 
 
 class ProjectionModel:
-    def __init__(self, data: GameData, config: Optional[ModelConfig] = None) -> None:
+    def __init__(
+        self,
+        data: GameData,
+        config: Optional[ModelConfig] = None,
+        european: Optional[EuropeanCalendar] = None,
+    ) -> None:
         self.data = data
         self.config = config or ModelConfig()
+        self.european = european or EuropeanCalendar()
         self._league_avg_attack, self._league_avg_defence = self._league_averages()
         # `form` is a rolling 30-day average, so it is zero for everyone until
         # the season starts. Keeping weight on it would silently discount every
@@ -313,9 +320,20 @@ class ProjectionModel:
         total_points = 0.0
         totals = {"attacking": 0.0, "defending": 0.0, "saves": 0.0, "bonus": 0.0, "defcon": 0.0}
         cs_probs, multipliers = [], []
+        congestion_notes = []
 
         for fixture in fixtures:
             parts = self._points_for_fixture(player, team, fixture)
+            # A midweek European tie thins the team sheet for this fixture
+            # only, so it scales the start probability here rather than in
+            # `start_probability`, which knows nothing about which match it is.
+            rotation, note = self.european.rotation_multiplier(
+                team.short_name, parse_kickoff(fixture.kickoff_time)
+            )
+            fixture_p_start = p_start * rotation
+            if note and note not in congestion_notes:
+                congestion_notes.append(note)
+
             per_start = (
                 2.0  # appearance points for 60+ minutes
                 + parts["attacking"]
@@ -324,21 +342,22 @@ class ProjectionModel:
                 + parts["bonus"]
                 + parts["defcon"]
             )
-            # Cameo appearances still bank an appearance point.
-            cameo = 0.30 * (1 - p_start) * player.availability
-            model_points = p_start * per_start + cameo
+            # Cameo appearances still bank an appearance point. A rested
+            # regular is a likely substitute, so cameos do not shrink here.
+            cameo = 0.30 * (1 - fixture_p_start) * player.availability
+            model_points = fixture_p_start * per_start + cameo
 
             ease = 0.5 + 0.5 * parts["attack_multiplier"]
             # Scale the external anchors by expected minutes, not just fitness:
             # `form` and `ep_next` are per-appearance figures, so a fringe player
             # who rarely starts must not carry a full-strength anchor.
-            minutes_factor = 0.15 * player.availability + 0.85 * p_start
+            minutes_factor = 0.15 * player.availability + 0.85 * fixture_p_start
             anchor = (w_form * player.form + w_ep * player.ep_next) * ease * minutes_factor
 
             total_points += w_model * model_points + anchor
 
             for key in totals:
-                totals[key] += p_start * parts[key]
+                totals[key] += fixture_p_start * parts[key]
             cs_probs.append(parts["clean_sheet_prob"])
             multipliers.append(parts["attack_multiplier"])
 
@@ -361,7 +380,7 @@ class ProjectionModel:
             num_fixtures=num_fixtures,
             value=round(total_points / player.cost, 3) if player.cost else 0.0,
             breakdown=breakdown,
-            notes=self._notes(player, p_start, num_fixtures, fixture_score),
+            notes=self._notes(player, p_start, num_fixtures, fixture_score) + congestion_notes,
         )
 
     def _notes(self, player: Player, p_start: float, num_fixtures: int, fixture_score: float) -> list:

@@ -44,6 +44,26 @@ assuming a pre-season number is a bug.
 median is ~7.7 per 90, season high 515. An award needs 10 actions in a match
 for a defender and 12 for everyone else. This bit once already.
 
+## European congestion
+
+The FPL API carries no field for UEFA competitions anywhere, so the midweek
+calendar lives in `fpl_agent/data/european_fixtures.json`, sourced from
+uefa.com. `european.py` turns it into a start-probability multiplier for the
+affected fixture only.
+
+**The team lists are empty until the draws are made, and the feature is inert
+while they are** — `EuropeanCalendar.active` is False and every multiplier is
+1.0, so no projection moves. Fill `teams` in with FPL `short_name` codes
+(ARS, LIV, …) after the Europa and Conference League draws on 28 Aug 2026 and
+once the Champions League entrants are settled, then set `_teams_verified`.
+
+What it models is rotation, not fatigue. Europa League clubs play Thursday and
+then again on Saturday — two days — and that is what changes a team sheet.
+Champions League clubs play Tuesday or Wednesday and get three or four, so
+they are penalised far less. First collisions with the Premier League calendar:
+UCL matchday 1 (8–10 Sep) lands before GW4, and UEL matchday 1 (16/17 Sep)
+before GW5.
+
 ## Scoring rules
 
 The model targets the **2026/27** rules. The reference is a Google Doc,
