@@ -76,3 +76,25 @@ def test_team_strength_by_venue():
     assert team.attack_strength(home=True) == 1300
     assert team.attack_strength(home=False) == 1250
     assert team.defence_strength(home=True) == 1280
+
+
+def test_fixture_is_played_once_provisionally_finished():
+    # `finished` lags the final whistle by a day or more while bonus points are
+    # confirmed; `finished_provisional` flips as soon as the match ends.
+    raw = {
+        "id": 1, "event": 1, "team_h": 1, "team_a": 2,
+        "team_h_difficulty": 2, "team_a_difficulty": 4,
+        "finished": False, "finished_provisional": True,
+    }
+    fixture = Fixture.from_api(raw)
+    assert not fixture.finished
+    assert fixture.played
+
+
+def test_fixture_not_played_before_kickoff():
+    raw = {
+        "id": 1, "event": 1, "team_h": 1, "team_a": 2,
+        "team_h_difficulty": 2, "team_a_difficulty": 4,
+        "finished": False, "finished_provisional": False,
+    }
+    assert not Fixture.from_api(raw).played

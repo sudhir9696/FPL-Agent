@@ -119,6 +119,9 @@ def build_dataset(seed: int = SEED) -> tuple:
                 "team_h_difficulty": min(5, max(1, away_tier)),
                 "team_a_difficulty": min(5, max(1, home_tier + 1)),
                 "finished": gw <= played_gws,
+                # The real API sets both flags on a settled match; only in the
+                # day or so after the whistle does provisional lead `finished`.
+                "finished_provisional": gw <= played_gws,
                 "kickoff_time": f"2025-{8 + (gw // 5):02d}-{(gw % 28) + 1:02d}T14:00:00Z",
             })
             fixture_id += 1

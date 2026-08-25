@@ -210,7 +210,7 @@ class GameData:
         return self.current_gameweek
 
     def team_games_played(self, team_id: int) -> int:
-        return sum(1 for f in self.fixtures if f.finished and f.involves(team_id))
+        return sum(1 for f in self.fixtures if f.played and f.involves(team_id))
 
     def upcoming_fixtures(self, team_id: int, start_gw: int, horizon: int) -> list:
         """Fixtures for a team across [start_gw, start_gw+horizon), blanks and
@@ -222,7 +222,7 @@ class GameData:
             if f.event is not None
             and start_gw <= f.event < end_gw
             and f.involves(team_id)
-            and not f.finished
+            and not f.played
         ]
 
     def save(self, directory: Path) -> None:

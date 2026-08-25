@@ -107,6 +107,10 @@ class Fixture:
     team_a_difficulty: int
     finished: bool
     kickoff_time: Optional[str] = None
+    # The API only flips `finished` once bonus points and match data are
+    # confirmed, which lags the final whistle by a day or more. Until then a
+    # played match is flagged `finished_provisional`.
+    finished_provisional: bool = False
 
     @classmethod
     def from_api(cls, raw: dict) -> "Fixture":
@@ -119,7 +123,18 @@ class Fixture:
             team_a_difficulty=_i(raw.get("team_a_difficulty"), 3),
             finished=bool(raw.get("finished")),
             kickoff_time=raw.get("kickoff_time"),
+            finished_provisional=bool(raw.get("finished_provisional")),
         )
+
+    @property
+    def played(self) -> bool:
+        """Whether the match has been played.
+
+        Prefer this over `finished` for anything counting games played or
+        looking ahead: `finished` stays False for a day or more after a match
+        ends, while `finished_provisional` flips at the final whistle.
+        """
+        return self.finished or self.finished_provisional
 
     def involves(self, team_id: int) -> bool:
         return team_id in (self.team_h, self.team_a)

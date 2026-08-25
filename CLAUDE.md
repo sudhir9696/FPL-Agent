@@ -40,6 +40,15 @@ deadline passes. `analysis.py` and `models.py` compensate for each of these;
 see the "Running it before the season starts" section of the README before
 assuming a pre-season number is a bug.
 
+**`finished` is not "the match was played".** The API leaves `finished`
+False for a day or more after the whistle while bonus and match data are
+confirmed; `finished_provisional` is the flag that flips at full time. Counting
+only `finished` made every team read as having played zero games for the first
+days of each gameweek, which sent `start_probability` down its pre-season branch
+and inverted the ranking -- nailed-on starters at ~3%, players yet to feature at
+~58%. Use `Fixture.played`, never `Fixture.finished`, for anything that counts
+games played or looks ahead.
+
 **`defensive_contribution` counts defensive ACTIONS, not awards won.** League
 median is ~7.7 per 90, season high 515. An award needs 10 actions in a match
 for a defender and 12 for everyone else. This bit once already.

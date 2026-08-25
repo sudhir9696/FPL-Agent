@@ -69,6 +69,11 @@ PENALTY_TAKER_BPS_ADJUSTMENT = {"GK": 1.0, "DEF": 1.0, "MID": 0.90, "FWD": 0.88}
 # minutes rates when no fixture has been played yet.
 FULL_SEASON_GAMES = 38
 
+# Matches of evidence before observed start rates are trusted on their own. A
+# one-game sample can only ever say 0% or 100%, so early in a season the rate is
+# shrunk towards FPL's own ep_next over this many games.
+STARTS_PRIOR_GAMES = 4
+
 
 def _poisson_at_least(k: int, lam: float) -> float:
     """P(X >= k) for X ~ Poisson(lam)."""
@@ -199,15 +204,24 @@ class ProjectionModel:
         # Before a ball is kicked, `starts` and `minutes` are last season's
         # totals, so they must be divided by a full season. Dividing by one
         # game instead would rate every squad player as nailed on.
-        games = max(1, played) if played else FULL_SEASON_GAMES
+        games = played if played else FULL_SEASON_GAMES
         start_rate = _clamp(player.starts / games, 0.0, 1.0)
         minutes_rate = _clamp(player.minutes / (games * 90.0), 0.0, 1.0)
         # Starts are the stronger signal; minutes catch sub-heavy roles.
         blended = 0.65 * start_rate + 0.35 * minutes_rate
+        ep_based = _clamp(player.ep_next / 5.0, 0.0, 0.8)
 
-        if player.minutes == 0 and player.ep_next > 0:
-            # No data yet (new signing, returning from injury): trust ep_next.
-            blended = _clamp(player.ep_next / 5.0, 0.0, 0.8)
+        if not played:
+            if player.minutes == 0 and player.ep_next > 0:
+                # No data yet (new signing, returning from injury): trust
+                # ep_next. Only safe while nobody has kicked a ball -- once the
+                # team has played, zero minutes is itself the evidence, and
+                # falling back here would rate a dropped player above a
+                # nailed-on one.
+                blended = ep_based
+        elif played < STARTS_PRIOR_GAMES and player.ep_next > 0:
+            weight = played / STARTS_PRIOR_GAMES
+            blended = weight * blended + (1 - weight) * ep_based
 
         return _clamp(blended * player.availability, 0.0, 1.0)
 

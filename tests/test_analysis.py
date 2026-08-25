@@ -197,3 +197,59 @@ def test_unavailable_keeper_scores_no_saves(data):
         return
     projection = model.project(injured_keepers[0], data.next_gameweek)
     assert projection.breakdown["saves"] == 0.0
+
+
+def _one_provisional_round(data, event=1):
+    clone = copy.deepcopy(data)
+    for fixture in clone.fixtures:
+        fixture.finished = False
+        fixture.finished_provisional = fixture.event == event
+    return clone
+
+
+def test_starters_outrank_absentees_in_a_provisionally_finished_round(data):
+    """Regression: `team_games_played` once counted only `finished` fixtures.
+
+    In the days after a round ends the API reports it as provisional but not
+    finished, so every team read as having played nothing. That sent
+    `start_probability` down the pre-season branch, dividing real minutes by a
+    full 38-game season -- a nailed-on starter scored ~3% while a player yet to
+    feature fell back to ep_next and scored ~58%. The ranking was inverted.
+    """
+    clone = _one_provisional_round(data)
+    model = ProjectionModel(clone, ModelConfig(horizon=5))
+    fit = [p for p in clone.players if p.status == "a" and p.ep_next > 0]
+
+    nailed_on = max(fit, key=lambda p: p.minutes)
+    # Everyone in the sample data has minutes; make a player who has none.
+    absent = copy.deepcopy(nailed_on)
+    absent.minutes = 0
+    absent.starts = 0
+
+    started = model.start_probability(nailed_on)
+    assert started > 0.5, started
+    assert model.start_probability(absent) < started
+
+
+def test_a_single_round_does_not_certify_a_starter(data):
+    # One game of evidence can only say 0% or 100%; shrinkage keeps it honest.
+    clone = _one_provisional_round(data)
+    model = ProjectionModel(clone, ModelConfig(horizon=5))
+    fit = [p for p in clone.players if p.status == "a" and p.ep_next > 0]
+    nailed_on = max(fit, key=lambda p: p.minutes)
+    assert model.start_probability(nailed_on) < 1.0
+
+
+def test_preseason_still_falls_back_to_ep_next(data):
+    # Before a ball is kicked there are no minutes to read, so ep_next is the
+    # only signal and the fallback must survive.
+    clone = copy.deepcopy(data)
+    for fixture in clone.fixtures:
+        fixture.finished = False
+        fixture.finished_provisional = False
+    model = ProjectionModel(clone, ModelConfig(horizon=5))
+    fit = [p for p in clone.players if p.status == "a" and p.ep_next > 0]
+    fresh = copy.deepcopy(fit[0])
+    fresh.minutes = 0
+    fresh.starts = 0
+    assert model.start_probability(fresh) > 0.0
