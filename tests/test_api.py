@@ -164,6 +164,9 @@ def _provisional_only(data, event=1):
     for fixture in clone.fixtures:
         fixture.finished = False
         fixture.finished_provisional = fixture.event == event
+        # A match cannot be provisionally finished without having kicked off,
+        # so all three flags have to move together or the state is impossible.
+        fixture.started = fixture.event == event
     return clone
 
 

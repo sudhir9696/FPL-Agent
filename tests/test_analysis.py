@@ -247,6 +247,7 @@ def test_preseason_still_falls_back_to_ep_next(data):
     for fixture in clone.fixtures:
         fixture.finished = False
         fixture.finished_provisional = False
+        fixture.started = False
     model = ProjectionModel(clone, ModelConfig(horizon=5))
     fit = [p for p in clone.players if p.status == "a" and p.ep_next > 0]
     fresh = copy.deepcopy(fit[0])
