@@ -23,8 +23,16 @@ from "TestProject"/"FPL Team Builder", and the GitHub repo is now `FPL-Agent`.
 **Reddit 403s from anywhere that isn't a residential IP.** Verified on a
 GitHub-hosted runner. Every cloud session — Codespaces, web Claude Code —
 hits this. Pass `--no-reddit` unless `REDDIT_CLIENT_ID` and
-`REDDIT_CLIENT_SECRET` are set. The FPL API itself is fine from cloud IPs;
-that was tested separately and all endpoints returned 200.
+`REDDIT_CLIENT_SECRET` are set.
+
+**The FPL API's reachability depends on the environment, not on "cloud" in
+general.** It returns 200 from a GitHub-hosted runner, but Claude Code web
+sessions sit behind an egress allowlist that refuses
+`fantasy.premierleague.com` at CONNECT — verified via both the container proxy
+and server-side fetch. When that happens, do not conclude the tool is broken:
+use `scripts/import_core_insights.py` against the FPL Core Insights GitHub
+mirror, which `raw.githubusercontent.com` serves fine. See "When the FPL API
+is blocked" in the README.
 
 **`tests/test_api.py::test_expired_cache_refetches` fails on Windows only,
 intermittently.** Coarse NTFS mtime resolution against `cache_ttl=0`, in the
@@ -40,9 +48,70 @@ deadline passes. `analysis.py` and `models.py` compensate for each of these;
 see the "Running it before the season starts" section of the README before
 assuming a pre-season number is a bug.
 
+**`finished` is not "the match was played".** The API leaves `finished`
+False for a day or more after the whistle while bonus and match data are
+confirmed; `finished_provisional` is the flag that flips at full time. Counting
+only `finished` made every team read as having played zero games for the first
+days of each gameweek, which sent `start_probability` down its pre-season branch
+and inverted the ranking -- nailed-on starters at ~3%, players yet to feature at
+~58%. Use `Fixture.played`, never `Fixture.finished`, for anything that counts
+games played or looks ahead.
+
 **`defensive_contribution` counts defensive ACTIONS, not awards won.** League
 median is ~7.7 per 90, season high 515. An award needs 10 actions in a match
 for a defender and 12 for everyone else. This bit once already.
+
+## Analysis inputs -- do not lean on FDR
+
+User preference, stated explicitly: squad, transfer and captaincy suggestions
+must not rest on fixture difficulty alone. Weigh, roughly in this order:
+
+1. **Underlying stats.** `expected_goals`, `expected_assists`,
+   `expected_goals_conceded`, `defensive_contribution` and the ICT components
+   in bootstrap-static are **Opta-supplied** -- Opta (Stats Perform) is the
+   FPL data provider. `models.py` parses them and `analysis.py` already scores
+   on xG90/xA90/xGC/DefCon. Quote these in any recommendation.
+2. **Minutes and role.** `starts`, `minutes`, penalty/set-piece duty,
+   confirmed team news.
+3. **Betting odds** where reachable -- see the egress table below.
+4. **FDR last**, as a tiebreak only. It is a 1-5 editorial tier, not a model.
+
+### What is actually reachable (verified 2026-09-04, cloud session)
+
+| Source | curl | Note |
+|---|---|---|
+| `fantasy.premierleague.com/api` | 200 | primary source, Opta-derived |
+| `raw.githubusercontent.com` | 200 | vaastav/Fantasy-Premier-League history; solioanalytics/open-fpl-solver |
+| `github.com`, `api.github.com` | 403 | use the raw host instead |
+| Understat, FBref, Sofascore, WhoScored | blocked | |
+| The Odds API, football-data.org, Sportmonks, Betfair | blocked | no bookmaker odds from a cloud session |
+| football-data.co.uk (historical odds CSV) | blocked | |
+| fpl.solioanalytics.com (+ its `/api/data/latest`) | blocked | curl and WebFetch both |
+| WebFetch to arbitrary domains | blocked | WebSearch works and returns summaries |
+
+Bookmaker odds therefore **cannot** be fetched here. Say so plainly rather
+than quietly substituting FDR. Odds need a local run with an API key, or an
+MCP server on the user's own machine.
+
+## European congestion
+
+The FPL API carries no field for UEFA competitions anywhere, so the midweek
+calendar lives in `fpl_agent/data/european_fixtures.json`, sourced from
+uefa.com. `european.py` turns it into a start-probability multiplier for the
+affected fixture only.
+
+**The team lists are empty until the draws are made, and the feature is inert
+while they are** — `EuropeanCalendar.active` is False and every multiplier is
+1.0, so no projection moves. Fill `teams` in with FPL `short_name` codes
+(ARS, LIV, …) after the Europa and Conference League draws on 28 Aug 2026 and
+once the Champions League entrants are settled, then set `_teams_verified`.
+
+What it models is rotation, not fatigue. Europa League clubs play Thursday and
+then again on Saturday — two days — and that is what changes a team sheet.
+Champions League clubs play Tuesday or Wednesday and get three or four, so
+they are penalised far less. First collisions with the Premier League calendar:
+UCL matchday 1 (8–10 Sep) lands before GW4, and UEL matchday 1 (16/17 Sep)
+before GW5.
 
 ## Scoring rules
 

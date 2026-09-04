@@ -68,7 +68,7 @@ https://fantasy.premierleague.com/entry/1234567/event/13
 Then:
 
 ```bash
-fpl-agent team 1234567 --horizon 5 --free-transfers 1
+fpl-agent team 1234567 --horizon 5 --free-transfers 1 --diagnose
 ```
 
 That prints your current XI and bench with a projection for each player, flags
@@ -96,9 +96,41 @@ past your free transfers must beat its own −4 hit to be suggested.
 --exclude "Son"              # keep players out
 --max-per-team 3             # club limit
 -o report.md                 # write a full Markdown report
+--show-fixtures              # each pick's opponents + the club fixture run
 --no-reddit                  # skip community analysis
 --weight-model 0.8 --weight-form 0.1 --weight-ep 0.1   # retune the blend
 ```
+
+### Analysing a squad without API access
+
+If `fantasy.premierleague.com` is unreachable, you can hand the tool your 15
+players directly — no entry id, no network call:
+
+```bash
+fpl-agent team --picks "Raya,Virgil,Senesi,B.Fernandes,Enzo,..." \
+  --bank 0.5 --data-dir fpl-data --diagnose --no-reddit
+```
+
+Names are matched against web names and full names; ids work too. Separate with
+commas, since names contain spaces.
+
+
+### What's wrong with my team
+
+```bash
+fpl-agent team 1234567 --diagnose
+```
+
+Transfer suggestions say *what to do*; `--diagnose` says *why*. It reports
+ranked findings — players who cannot play, starters who are not nailed, blanks,
+a captain who is not your best projected starter, money idle on the bench or in
+the bank, club concentration — and then diffs your squad against the optimal one
+at your budget, listing your weakest links and what you are missing.
+
+The points gap it quotes is an upper bound nobody reaches: it assumes perfect
+foresight of the model's own projections. Treat the ranking of the findings as
+the signal, not the absolute number.
+
 
 ## Mini-league analysis
 
@@ -238,6 +270,32 @@ export REDDIT_CLIENT_SECRET=...
 The client then uses OAuth automatically. Or pass `--no-reddit` to skip it —
 every other feature works without Reddit.
 
+## When the FPL API is blocked
+
+Some networks — corporate proxies, sandboxed CI runners, cloud IDE sessions —
+block `fantasy.premierleague.com` outright. You do not have to give up on real
+data: [FPL Core Insights](https://github.com/olbauday/FPL-Core-Insights)
+mirrors the same dataset to GitHub as CSVs, refreshed twice daily (07:30 and
+17:30 UTC), and adds CBIT metrics, Elo ratings and set-piece order.
+
+```bash
+git clone --depth 1 https://github.com/olbauday/FPL-Core-Insights
+python scripts/import_core_insights.py FPL-Core-Insights -o fpl-data
+fpl-agent build --data-dir fpl-data --horizon 6 --no-reddit
+```
+
+The importer emits the same `bootstrap.json` / `fixtures.json` pair that
+`--data-dir` already reads, so every command works unchanged.
+
+Pre-season the current season's counting stats are all zero, so each player's
+statistical base is carried forward from the prior season, matched on the
+`player_code` that stays stable across seasons (461 of 599 players for
+2026/27). Price, ownership, availability and set-piece order always come from
+the current season. Two caveats: Core Insights publishes price in millions
+where the API uses tenths, and it carries no FDR, so fixture difficulty is
+approximated from the opponent's published strength tier.
+
+
 ## Working offline
 
 ```bash
@@ -266,7 +324,7 @@ data). `--refresh` forces a refetch.
 python -m pytest -q
 ```
 
-139 tests cover parsing, the projection maths, squad legality under every
+159 tests cover parsing, the projection maths, squad legality under every
 constraint, ILP-vs-heuristic optimality, Reddit parsing and sentiment scoping,
 league ownership maths, and end-to-end CLI runs. They use a generated dataset that mirrors the real API
 schema, so the suite runs with no network access:
