@@ -107,6 +107,11 @@ class Fixture:
     team_a_difficulty: int
     finished: bool
     kickoff_time: Optional[str] = None
+    # The API only flips `finished` once bonus points and match data are
+    # confirmed, which lags the final whistle by a day or more. Until then a
+    # played match is flagged `finished_provisional`, and a match still in
+    # progress is flagged `started`.
+    finished_provisional: bool = False
     started: bool = False
 
     @classmethod
@@ -120,10 +125,21 @@ class Fixture:
             team_a_difficulty=_i(raw.get("team_a_difficulty"), 3),
             finished=bool(raw.get("finished")),
             kickoff_time=raw.get("kickoff_time"),
-            # A kicked-off match already contributes minutes to the totals, so
-            # it has to count toward the denominator even before it finishes.
+            finished_provisional=bool(raw.get("finished_provisional")),
             started=bool(raw.get("started") or raw.get("finished")),
         )
+
+    @property
+    def played(self) -> bool:
+        """Whether the match has been played.
+
+        Prefer this over `finished` for anything counting games played or
+        looking ahead: `finished` stays False for a day or more after a match
+        ends, while `finished_provisional` flips at the final whistle. A match
+        still in progress counts too -- its minutes are already in the player
+        totals, so leaving it out makes the denominator short mid-gameweek.
+        """
+        return self.finished or self.finished_provisional or self.started
 
     def involves(self, team_id: int) -> bool:
         return team_id in (self.team_h, self.team_a)

@@ -48,9 +48,50 @@ deadline passes. `analysis.py` and `models.py` compensate for each of these;
 see the "Running it before the season starts" section of the README before
 assuming a pre-season number is a bug.
 
+**`finished` is not "the match was played".** The API leaves `finished`
+False for a day or more after the whistle while bonus and match data are
+confirmed; `finished_provisional` is the flag that flips at full time. Counting
+only `finished` made every team read as having played zero games for the first
+days of each gameweek, which sent `start_probability` down its pre-season branch
+and inverted the ranking -- nailed-on starters at ~3%, players yet to feature at
+~58%. Use `Fixture.played`, never `Fixture.finished`, for anything that counts
+games played or looks ahead.
+
 **`defensive_contribution` counts defensive ACTIONS, not awards won.** League
 median is ~7.7 per 90, season high 515. An award needs 10 actions in a match
 for a defender and 12 for everyone else. This bit once already.
+
+## Analysis inputs -- do not lean on FDR
+
+User preference, stated explicitly: squad, transfer and captaincy suggestions
+must not rest on fixture difficulty alone. Weigh, roughly in this order:
+
+1. **Underlying stats.** `expected_goals`, `expected_assists`,
+   `expected_goals_conceded`, `defensive_contribution` and the ICT components
+   in bootstrap-static are **Opta-supplied** -- Opta (Stats Perform) is the
+   FPL data provider. `models.py` parses them and `analysis.py` already scores
+   on xG90/xA90/xGC/DefCon. Quote these in any recommendation.
+2. **Minutes and role.** `starts`, `minutes`, penalty/set-piece duty,
+   confirmed team news.
+3. **Betting odds** where reachable -- see the egress table below.
+4. **FDR last**, as a tiebreak only. It is a 1-5 editorial tier, not a model.
+
+### What is actually reachable (verified 2026-09-04, cloud session)
+
+| Source | curl | Note |
+|---|---|---|
+| `fantasy.premierleague.com/api` | 200 | primary source, Opta-derived |
+| `raw.githubusercontent.com` | 200 | vaastav/Fantasy-Premier-League history; solioanalytics/open-fpl-solver |
+| `github.com`, `api.github.com` | 403 | use the raw host instead |
+| Understat, FBref, Sofascore, WhoScored | blocked | |
+| The Odds API, football-data.org, Sportmonks, Betfair | blocked | no bookmaker odds from a cloud session |
+| football-data.co.uk (historical odds CSV) | blocked | |
+| fpl.solioanalytics.com (+ its `/api/data/latest`) | blocked | curl and WebFetch both |
+| WebFetch to arbitrary domains | blocked | WebSearch works and returns summaries |
+
+Bookmaker odds therefore **cannot** be fetched here. Say so plainly rather
+than quietly substituting FDR. Odds need a local run with an API key, or an
+MCP server on the user's own machine.
 
 ## Scoring rules
 

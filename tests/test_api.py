@@ -154,3 +154,29 @@ def test_league_entries_stops_on_empty_page(tmp_path):
     client = FPLClient(cache_dir=tmp_path, session=FakeSession(payload))
     _, entries = client.league_entries(1, max_entries=100)
     assert entries == []
+
+
+def _provisional_only(data, event=1):
+    """A copy of `data` where only gameweek `event` has been played, and only
+    provisionally -- the real API state in the day or two after a round ends."""
+    import copy
+    clone = copy.deepcopy(data)
+    for fixture in clone.fixtures:
+        fixture.finished = False
+        fixture.finished_provisional = fixture.event == event
+    return clone
+
+
+def test_team_games_played_counts_provisionally_finished_rounds(data):
+    clone = _provisional_only(data)
+    team_id = next(iter(clone.teams))
+    # Every team plays exactly once per gameweek, so one round played == 1.
+    assert clone.team_games_played(team_id) == 1
+
+
+def test_upcoming_fixtures_excludes_a_provisionally_finished_round(data):
+    clone = _provisional_only(data)
+    team_id = next(iter(clone.teams))
+    upcoming = clone.upcoming_fixtures(team_id, start_gw=1, horizon=3)
+    assert upcoming, "later rounds are still to come"
+    assert all(f.event != 1 for f in upcoming)

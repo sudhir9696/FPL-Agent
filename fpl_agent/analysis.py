@@ -69,9 +69,10 @@ PENALTY_TAKER_BPS_ADJUSTMENT = {"GK": 1.0, "DEF": 1.0, "MID": 0.90, "FWD": 0.88}
 # minutes rates when no fixture has been played yet.
 FULL_SEASON_GAMES = 38
 
-# Games of real evidence needed before observed minutes outweigh `ep_next`.
-# Early in a season a single rotation looks identical to a lost place.
-EARLY_SEASON_PRIOR_GAMES = 3.0
+# Matches of evidence before observed start rates are trusted on their own. A
+# one-game sample can only ever say 0% or 100%, so early in a season the rate is
+# shrunk towards FPL's own ep_next over this many games.
+STARTS_PRIOR_GAMES = 4
 
 
 def _poisson_at_least(k: int, lam: float) -> float:
@@ -198,40 +199,29 @@ class ProjectionModel:
 
     # --- minutes ------------------------------------------------------
     def start_probability(self, player: Player) -> float:
-        """Probability the player starts a given match, 0..1.
-
-        The denominator has to cover the same period as `minutes` and
-        `starts`. Those totals are last season's until the first match kicks
-        off, and this season's from that moment on -- so which season the
-        model is reading has to be settled before dividing by anything.
-        """
-        # No data of our own yet: fall back on FPL's own forecast.
-        prior = _clamp(player.ep_next / 5.0, 0.0, 0.85) if player.ep_next > 0 else 0.5
-
-        if not self.data.season_started:
-            # Totals still describe last season, so divide by a full one.
-            # Dividing by the zero games played so far would rate every squad
-            # player as nailed on.
-            games = FULL_SEASON_GAMES
-        else:
-            games = self.data.team_games_played(player.team)
-            if games <= 0:
-                return _clamp(prior * player.availability, 0.0, 1.0)
-
+        """Probability the player starts a given match, 0..1."""
+        played = self.data.team_games_played(player.team)
+        # Before a ball is kicked, `starts` and `minutes` are last season's
+        # totals, so they must be divided by a full season. Dividing by one
+        # game instead would rate every squad player as nailed on.
+        games = played if played else FULL_SEASON_GAMES
         start_rate = _clamp(player.starts / games, 0.0, 1.0)
         minutes_rate = _clamp(player.minutes / (games * 90.0), 0.0, 1.0)
         # Starts are the stronger signal; minutes catch sub-heavy roles.
         blended = 0.65 * start_rate + 0.35 * minutes_rate
+        ep_based = _clamp(player.ep_next / 5.0, 0.0, 0.8)
 
-        if player.minutes == 0 and player.ep_next > 0:
-            # No data yet (new signing, returning from injury): trust ep_next.
-            blended = prior
-        elif self.data.season_started:
-            # One or two matches is thin evidence either way -- a rested
-            # regular is not suddenly a bench player. Regress toward the
-            # forecast until enough of the season has accumulated.
-            weight = games / (games + EARLY_SEASON_PRIOR_GAMES)
-            blended = weight * blended + (1 - weight) * prior
+        if not played:
+            if player.minutes == 0 and player.ep_next > 0:
+                # No data yet (new signing, returning from injury): trust
+                # ep_next. Only safe while nobody has kicked a ball -- once the
+                # team has played, zero minutes is itself the evidence, and
+                # falling back here would rate a dropped player above a
+                # nailed-on one.
+                blended = ep_based
+        elif played < STARTS_PRIOR_GAMES and player.ep_next > 0:
+            weight = played / STARTS_PRIOR_GAMES
+            blended = weight * blended + (1 - weight) * ep_based
 
         return _clamp(blended * player.availability, 0.0, 1.0)
 
