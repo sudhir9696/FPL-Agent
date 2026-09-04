@@ -23,8 +23,16 @@ from "TestProject"/"FPL Team Builder", and the GitHub repo is now `FPL-Agent`.
 **Reddit 403s from anywhere that isn't a residential IP.** Verified on a
 GitHub-hosted runner. Every cloud session — Codespaces, web Claude Code —
 hits this. Pass `--no-reddit` unless `REDDIT_CLIENT_ID` and
-`REDDIT_CLIENT_SECRET` are set. The FPL API itself is fine from cloud IPs;
-that was tested separately and all endpoints returned 200.
+`REDDIT_CLIENT_SECRET` are set.
+
+**The FPL API's reachability depends on the environment, not on "cloud" in
+general.** It returns 200 from a GitHub-hosted runner, but Claude Code web
+sessions sit behind an egress allowlist that refuses
+`fantasy.premierleague.com` at CONNECT — verified via both the container proxy
+and server-side fetch. When that happens, do not conclude the tool is broken:
+use `scripts/import_core_insights.py` against the FPL Core Insights GitHub
+mirror, which `raw.githubusercontent.com` serves fine. See "When the FPL API
+is blocked" in the README.
 
 **`tests/test_api.py::test_expired_cache_refetches` fails on Windows only,
 intermittently.** Coarse NTFS mtime resolution against `cache_ttl=0`, in the

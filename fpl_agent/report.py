@@ -430,3 +430,124 @@ def format_league_comparison(comparison: dict, team_name: str) -> str:
                 f"{row.global_ownership:.1f}% globally, {row.expected_points:.1f} xPTS"
             )
     return "\n".join(lines)
+
+
+SEVERITY_LABEL = {
+    "critical": "CRITICAL",
+    "high": "HIGH",
+    "medium": "MEDIUM",
+    "low": "LOW",
+}
+
+
+def format_diagnosis(diagnosis: dict, data, horizon: int) -> str:
+    """Render the "what is wrong with my team" findings."""
+    findings = diagnosis.get("findings") or []
+    lines = ["", "=" * 78, "WHAT'S WRONG WITH THIS TEAM", "=" * 78]
+
+    if not findings:
+        lines.append("\n  Nothing flagged. Squad is available, nailed and fully invested.")
+        return "\n".join(lines)
+
+    for i, finding in enumerate(findings, start=1):
+        label = SEVERITY_LABEL.get(finding.severity, finding.severity.upper())
+        header = f"\n{i}. [{label}] {finding.title}"
+        if finding.cost:
+            header += f"  (~{finding.cost:.1f} pts)"
+        lines.append(header)
+        lines.append(f"   {finding.detail}")
+        for player in finding.players:
+            lines.append(f"     - {player}")
+
+    comparison = diagnosis.get("comparison") or {}
+    if comparison:
+        lines.append("")
+        lines.append("-" * 78)
+        lines.append(
+            f"VS OPTIMAL SQUAD  |  {comparison['overlap']}/15 shared  |  "
+            f"gap {comparison['points_gap']:+.1f} pts over {horizon} GW(s)"
+        )
+        lines.append("-" * 78)
+
+        drop, add = comparison.get("drop") or [], comparison.get("add") or []
+        if drop:
+            lines.append("\n  Weakest links (you hold, the optimal squad does not):")
+            for projection in drop[:8]:
+                lines.append(
+                    f"    - {projection.player.web_name} "
+                    f"({projection.player.position}, {projection.player.cost:.1f}m): "
+                    f"{projection.expected_points:.1f} xPTS, "
+                    f"starts ~{projection.start_probability:.0%}"
+                )
+        if add:
+            lines.append("\n  Missing (optimal squad holds, you do not):")
+            for projection in add[:8]:
+                lines.append(
+                    f"    + {projection.player.web_name} "
+                    f"({projection.player.position}, {projection.player.cost:.1f}m): "
+                    f"{projection.expected_points:.1f} xPTS, "
+                    f"starts ~{projection.start_probability:.0%}"
+                )
+    return "\n".join(lines)
+
+
+def format_squad_fixtures(squad, data, start_gw: int, horizon: int) -> str:
+    """Each pick's upcoming opponents: club, venue and difficulty."""
+    lines = ["", "=" * 78, f"FIXTURES: GW{start_gw}-GW{start_gw + horizon - 1}", "=" * 78]
+    header = ["POS", "PLAYER", "CLUB"] + [f"GW{start_gw + i}" for i in range(horizon)]
+    aligns = ["<", "<", "<"] + ["<"] * horizon
+
+    def rows_for(picks: list) -> list:
+        rows = []
+        for projection in picks:
+            player = projection.player
+            team = data.teams.get(player.team)
+            cells = [player.position, player.web_name[:16], team.name[:14] if team else "?"]
+            fixtures = data.upcoming_fixtures(player.team, start_gw, horizon)
+            by_gw: dict = {}
+            for fixture in fixtures:
+                opponent = data.teams.get(fixture.opponent_of(player.team))
+                venue = "H" if fixture.is_home_for(player.team) else "A"
+                label = f"{opponent.short_name if opponent else '?'}({venue}){fixture.difficulty_for(player.team)}"
+                by_gw.setdefault(fixture.event, []).append(label)
+            for i in range(horizon):
+                cells.append("+".join(by_gw.get(start_gw + i, ["-"])))
+            rows.append(cells)
+        return rows
+
+    starters = sorted(
+        squad.starters, key=lambda p: (POSITION_ORDER[p.player.position], -p.expected_points)
+    )
+    lines.append("\nSTARTING XI")
+    lines.append(_table(header, rows_for(starters), aligns))
+    lines.append("\nBENCH")
+    lines.append(_table(header, rows_for(squad.bench), aligns))
+    lines.append("\n  Format: OPPONENT(H/A)difficulty, 1 = easiest, 5 = hardest. "
+                 "'-' = blank, 'A+B' = double.")
+    return "\n".join(lines)
+
+
+def format_team_fixture_ease(data, start_gw: int, horizon: int, limit: int = 20) -> str:
+    """Rank clubs by how kind their fixture run is over the horizon."""
+    rows = []
+    for team in data.teams.values():
+        fixtures = data.upcoming_fixtures(team.id, start_gw, horizon)
+        if not fixtures:
+            continue
+        difficulties = [f.difficulty_for(team.id) for f in fixtures]
+        labels = []
+        for fixture in fixtures:
+            opponent = data.teams.get(fixture.opponent_of(team.id))
+            venue = "H" if fixture.is_home_for(team.id) else "A"
+            labels.append(f"{opponent.short_name if opponent else '?'}({venue})")
+        rows.append((
+            sum(difficulties) / len(difficulties),
+            [team.name[:16], len(fixtures), f"{sum(difficulties) / len(difficulties):.2f}",
+             " ".join(labels)],
+        ))
+    rows.sort(key=lambda r: r[0])
+    return (
+        f"\nFIXTURE RUN BY CLUB (GW{start_gw}-GW{start_gw + horizon - 1}, easiest first)\n"
+        + _table(["CLUB", "GAMES", "AVG FDR", "OPPONENTS"],
+                 [r[1] for r in rows[:limit]], ["<", ">", ">", "<"])
+    )

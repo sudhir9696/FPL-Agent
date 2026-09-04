@@ -16,6 +16,7 @@ from .league import (
     LeagueEntry, compare_to_league, find_entry, load_picks, ownership_table,
 )
 from .models import POSITIONS
+from .diagnose import diagnose_squad
 from .optimizer import OptimizerError, build_squad_object, optimize_squad, suggest_transfers
 from .reddit import RedditClient, RedditError, cross_reference, extract_player_buzz, gather_threads
 
@@ -141,6 +142,9 @@ def cmd_build(args) -> int:
     cross = cross_reference(projections, buzz) if buzz else {}
 
     print(report.format_squad(squad, data, config.horizon))
+    if args.show_fixtures:
+        print(report.format_squad_fixtures(squad, data, start_gw, config.horizon))
+        print(report.format_team_fixture_ease(data, start_gw, config.horizon))
     if threads:
         print(report.format_threads(threads))
     if buzz:
@@ -224,29 +228,44 @@ def cmd_team(args) -> int:
     projections = ProjectionModel(data, config).project_all(start_gw=start_gw)
     by_id = {p.player.id: p for p in projections}
 
-    client = FPLClient(cache_dir=args.cache_dir)
     picks_gw = args.picks_gw or max(1, data.current_gameweek)
-    try:
-        entry = client.entry(args.entry)
-        picks_payload = client.entry_picks(args.entry, picks_gw, use_cache=not args.refresh)
-    except FPLError as exc:
-        print(f"error: {exc}", file=sys.stderr)
-        return 1
 
-    bank = entry.get("last_deadline_bank")
-    bank = (bank / 10.0) if isinstance(bank, (int, float)) else 0.0
+    if args.picks:
+        # Squad supplied by hand -- no API call needed.
+        try:
+            # Split on commas only: names contain spaces ("Van Hecke").
+            raw = args.picks.split(",") if "," in args.picks else args.picks.split()
+            picked_ids = _resolve_players(raw, data)
+        except SystemExit as exc:
+            print(exc, file=sys.stderr)
+            return 1
+        current = [by_id[i] for i in picked_ids if i in by_id]
+        bank = args.bank
+        entry = {"name": "your squad", "player_first_name": "", "player_last_name": ""}
+    else:
+        if args.entry is None:
+            print("error: give an entry id, or pass --picks with 15 player names.",
+                  file=sys.stderr)
+            return 1
+        client = FPLClient(cache_dir=args.cache_dir)
+        try:
+            entry = client.entry(args.entry)
+            picks_payload = client.entry_picks(args.entry, picks_gw, use_cache=not args.refresh)
+        except FPLError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 1
 
-    current = []
-    for pick in picks_payload.get("picks", []):
-        projection = by_id.get(pick.get("element"))
-        if projection:
-            current.append(projection)
+        bank = entry.get("last_deadline_bank")
+        bank = (bank / 10.0) if isinstance(bank, (int, float)) else 0.0
+
+        current = []
+        for pick in picks_payload.get("picks", []):
+            projection = by_id.get(pick.get("element"))
+            if projection:
+                current.append(projection)
 
     if len(current) != 15:
-        print(
-            f"warning: resolved {len(current)}/15 picks for entry {args.entry} in GW{picks_gw}.",
-            file=sys.stderr,
-        )
+        print(f"warning: resolved {len(current)}/15 picks.", file=sys.stderr)
     if not current:
         print("error: no picks resolved -- check the entry id and gameweek.", file=sys.stderr)
         return 1
@@ -258,6 +277,15 @@ def cmd_team(args) -> int:
 
     squad = build_squad_object(current)
     print(report.format_squad(squad, data, config.horizon))
+    if args.show_fixtures:
+        print(report.format_squad_fixtures(squad, data, start_gw, config.horizon))
+
+    if args.diagnose:
+        diagnosis = diagnose_squad(
+            current, projections, bank=bank, horizon=config.horizon,
+            max_per_team=args.max_per_team, bench_weight=args.bench_weight,
+        )
+        print(report.format_diagnosis(diagnosis, data, config.horizon))
 
     moves = suggest_transfers(
         current, projections, bank=bank,
@@ -356,32 +384,40 @@ def cmd_fetch(args) -> int:
     return 0
 
 
+def _resolve_players(values, data) -> list:
+    """Turn player names or ids into player ids, preserving order."""
+    resolved = []
+    for value in values or []:
+        value = str(value).strip()
+        if not value:
+            continue
+        if value.isdigit():
+            resolved.append(int(value))
+            continue
+        needle = value.lower()
+        matches = [
+            p for p in data.players
+            if needle == p.web_name.lower() or needle in p.full_name.lower()
+        ]
+        if not matches:
+            raise SystemExit(f"error: no player matches '{value}'")
+        if len(matches) > 1:
+            exact = [p for p in matches if p.web_name.lower() == needle]
+            if len(exact) == 1:
+                matches = exact
+            else:
+                names = ", ".join(f"{p.web_name} ({p.id})" for p in matches[:8])
+                raise SystemExit(f"error: '{value}' is ambiguous -- {names}")
+        resolved.append(matches[0].id)
+    return resolved
+
+
 def _resolve_name_filters(args, data) -> tuple:
     """Turn --lock/--exclude names or ids into player ids."""
-    def resolve(values) -> set:
-        resolved = set()
-        for value in values or []:
-            if str(value).isdigit():
-                resolved.add(int(value))
-                continue
-            needle = str(value).lower()
-            matches = [
-                p for p in data.players
-                if needle == p.web_name.lower() or needle in p.full_name.lower()
-            ]
-            if not matches:
-                raise SystemExit(f"error: no player matches '{value}'")
-            if len(matches) > 1:
-                exact = [p for p in matches if p.web_name.lower() == needle]
-                if len(exact) == 1:
-                    matches = exact
-                else:
-                    names = ", ".join(f"{p.web_name} (id {p.id})" for p in matches[:8])
-                    raise SystemExit(f"error: '{value}' is ambiguous -- {names}")
-            resolved.add(matches[0].id)
-        return resolved
-
-    return resolve(getattr(args, "lock", None)), resolve(getattr(args, "exclude", None))
+    return (
+        set(_resolve_players(getattr(args, "lock", None), data)),
+        set(_resolve_players(getattr(args, "exclude", None), data)),
+    )
 
 
 def _maybe_write_report(args, squad, projections, data, horizon, start_gw,
@@ -415,6 +451,8 @@ def build_parser() -> argparse.ArgumentParser:
     build.add_argument("--max-per-team", type=int, default=3, help="club limit (default: 3)")
     build.add_argument("--bench-weight", type=float, default=0.12,
                        help="how much bench points count toward the objective")
+    build.add_argument("--show-fixtures", action="store_true",
+                       help="show each pick's upcoming opponents and the club fixture run")
     build.add_argument("--lock", nargs="+", default=[],
                        help="players who must be in the squad (name or id)")
     build.add_argument("--exclude", nargs="+", default=[],
@@ -443,9 +481,23 @@ def build_parser() -> argparse.ArgumentParser:
     team = subparsers.add_parser("team", help="analyse an existing team and suggest transfers")
     _add_common_args(team)
     _add_reddit_args(team)
-    team.add_argument("entry", type=int, help="your FPL entry (team) id")
+    team.add_argument("entry", type=int, nargs="?", default=None,
+                      help="your FPL entry (team) id (omit if using --picks)")
+    team.add_argument("--picks", default=None,
+                      help="analyse a squad given by hand instead of fetching it: 15 "
+                           "comma-separated player names or ids. Use when the FPL API "
+                           "is unreachable.")
+    team.add_argument("--bank", type=float, default=0.0,
+                      help="money in the bank, in millions, when using --picks")
     team.add_argument("--picks-gw", type=int, default=None,
                       help="gameweek to read picks from (default: current)")
+    team.add_argument("--show-fixtures", action="store_true",
+                      help="show each pick's upcoming opponents")
+    team.add_argument("--diagnose", action="store_true",
+                      help="explain what is wrong with the squad and compare it to the optimal one")
+    team.add_argument("--max-per-team", type=int, default=3, help="club limit (default: 3)")
+    team.add_argument("--bench-weight", type=float, default=0.12,
+                      help="how much bench points count when building the optimal comparison")
     team.add_argument("--free-transfers", type=int, default=1)
     team.add_argument("--max-transfers", type=int, default=3)
     team.set_defaults(func=cmd_team)
