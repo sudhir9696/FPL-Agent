@@ -44,6 +44,12 @@ def _add_common_args(parser: argparse.ArgumentParser) -> None:
                         help="ignore defensive-contribution points")
     parser.add_argument("--no-2627-bps", action="store_true",
                         help="score bonus against the old BPS, not the 2026/27 one")
+    parser.add_argument("--recent-window", type=int, default=5,
+                        help="gameweeks of rolling form to weigh (0 disables)")
+    parser.add_argument("--weight-recent", type=float, default=0.45,
+                        help="how far to pull season rates toward recent form")
+    parser.add_argument("--no-recent-form", action="store_true",
+                        help="skip per-gameweek history (one API call per player)")
     parser.add_argument("-o", "--output", type=Path, default=None,
                         help="write a Markdown report to this path")
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose logging")
@@ -85,7 +91,29 @@ def build_model_config(args) -> ModelConfig:
         weight_ep=args.weight_ep,
         include_defcon=not args.no_defcon,
         apply_2627_bps=not getattr(args, "no_2627_bps", False),
+        recent_window=0 if getattr(args, "no_recent_form", False)
+        else getattr(args, "recent_window", 5),
+        weight_recent=getattr(args, "weight_recent", 0.45),
     )
+
+
+def load_history(args, data, config, player_ids=None):
+    """Per-gameweek history for the players that matter.
+
+    One request per player, so a squad costs 15 calls and a full build costs
+    one per player who has actually featured -- those with no minutes have no
+    history to weigh anyway.
+    """
+    from .history import HistoryStore
+    if config.recent_window <= 0 or config.weight_recent <= 0:
+        return HistoryStore()
+    if args.data_dir:  # offline run: no API to call
+        return HistoryStore()
+    if player_ids is None:
+        player_ids = [p.id for p in data.players if p.minutes > 0]
+    client = FPLClient(cache_dir=args.cache_dir)
+    log.info("loading gameweek history for %d players", len(list(player_ids)))
+    return HistoryStore.load(client, player_ids, use_cache=not args.refresh)
 
 
 def gather_reddit(args, data, gameweek: int) -> tuple:
@@ -117,7 +145,7 @@ def cmd_build(args) -> int:
     data = load_game_data(args)
     start_gw = args.gw or data.next_gameweek
     config = build_model_config(args)
-    model = ProjectionModel(data, config)
+    model = ProjectionModel(data, config, history=load_history(args, data, config))
 
     log.info("projecting %d players from GW%d over %d GWs",
              len(data.players), start_gw, config.horizon)
@@ -162,7 +190,9 @@ def cmd_players(args) -> int:
     data = load_game_data(args)
     start_gw = args.gw or data.next_gameweek
     config = build_model_config(args)
-    projections = ProjectionModel(data, config).project_all(start_gw=start_gw)
+    projections = ProjectionModel(
+        data, config, history=load_history(args, data, config)
+    ).project_all(start_gw=start_gw)
 
     if args.max_price is not None:
         projections = [p for p in projections if p.player.cost <= args.max_price]
@@ -202,7 +232,9 @@ def cmd_reddit(args) -> int:
     data = load_game_data(args)
     start_gw = args.gw or data.next_gameweek
     config = build_model_config(args)
-    projections = ProjectionModel(data, config).project_all(start_gw=start_gw)
+    projections = ProjectionModel(
+        data, config, history=load_history(args, data, config)
+    ).project_all(start_gw=start_gw)
 
     threads, buzz, _ = gather_reddit(args, data, start_gw)
     if not threads:
@@ -225,7 +257,9 @@ def cmd_team(args) -> int:
     data = load_game_data(args)
     config = build_model_config(args)
     start_gw = args.gw or data.next_gameweek
-    projections = ProjectionModel(data, config).project_all(start_gw=start_gw)
+    projections = ProjectionModel(
+        data, config, history=load_history(args, data, config)
+    ).project_all(start_gw=start_gw)
     by_id = {p.player.id: p for p in projections}
 
     picks_gw = args.picks_gw or max(1, data.current_gameweek)
@@ -312,7 +346,9 @@ def cmd_league(args) -> int:
     data = load_game_data(args)
     config = build_model_config(args)
     start_gw = args.gw or data.next_gameweek
-    projections = ProjectionModel(data, config).project_all(start_gw=start_gw)
+    projections = ProjectionModel(
+        data, config, history=load_history(args, data, config)
+    ).project_all(start_gw=start_gw)
 
     client = FPLClient(cache_dir=args.cache_dir)
     try:

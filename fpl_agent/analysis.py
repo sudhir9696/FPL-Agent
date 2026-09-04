@@ -22,6 +22,7 @@ from typing import Iterable, Optional
 
 from .api import GameData
 from .european import EuropeanCalendar, parse_kickoff
+from .history import HistoryStore
 from .models import (
     ASSIST_POINTS,
     CLEAN_SHEET_POINTS,
@@ -104,6 +105,8 @@ class ModelConfig:
     prior_minutes: float = PRIOR_MINUTES
     include_defcon: bool = True      # 2025/26 defensive contribution points
     apply_2627_bps: bool = True      # 2026/27 bonus-point system recalibration
+    recent_window: int = 5           # gameweeks of rolling form to weigh
+    weight_recent: float = 0.45      # pull toward recent rates when history exists
     differential_threshold: float = 5.0   # selected_by % below which = differential
     template_threshold: float = 30.0      # selected_by % above which = template
 
@@ -137,10 +140,12 @@ class ProjectionModel:
         data: GameData,
         config: Optional[ModelConfig] = None,
         european: Optional[EuropeanCalendar] = None,
+        history: Optional[HistoryStore] = None,
     ) -> None:
         self.data = data
         self.config = config or ModelConfig()
         self.european = european or EuropeanCalendar()
+        self.history = history or HistoryStore()
         self._league_avg_attack, self._league_avg_defence = self._league_averages()
         # `form` is a rolling 30-day average, so it is zero for everyone until
         # the season starts. Keeping weight on it would silently discount every
@@ -233,17 +238,38 @@ class ProjectionModel:
         return _clamp(blended * player.availability, 0.0, 1.0)
 
     # --- per-fixture scoring -------------------------------------------
+    def _blended_rate(self, player: Player, field: str, prior_rate: float) -> float:
+        """Per-90 rate for `field`, pulling season totals toward recent form.
+
+        Season totals are the stable estimate and recent gameweeks the timely
+        one, so neither should override the other. The window is trusted in
+        proportion to the minutes actually behind it: a lone substitute
+        appearance carries almost no weight, a full run carries the configured
+        maximum. Without history for this player the season rate stands alone.
+        """
+        cfg = self.config
+        season = _shrunk_rate(
+            getattr(player, field), player.minutes, prior_rate, cfg.prior_minutes
+        )
+        if cfg.recent_window <= 0 or cfg.weight_recent <= 0:
+            return season
+        window = self.history.window(player.id, cfg.recent_window)
+        if window is None or window.minutes <= 0:
+            return season
+        recent = _shrunk_rate(
+            getattr(window, field), window.minutes, prior_rate, cfg.prior_minutes
+        )
+        evidence = _clamp(window.minutes / (cfg.recent_window * 90.0), 0.0, 1.0)
+        weight = cfg.weight_recent * evidence
+        return (1.0 - weight) * season + weight * recent
+
     def _points_for_fixture(self, player: Player, team: Team, fixture: Fixture) -> dict:
         cfg = self.config
         pos = player.position
         attack_mult = self.attack_multiplier(team, fixture)
 
-        xg90 = _shrunk_rate(
-            player.expected_goals, player.minutes, PRIOR_XG90[pos], cfg.prior_minutes
-        ) * attack_mult
-        xa90 = _shrunk_rate(
-            player.expected_assists, player.minutes, PRIOR_XA90[pos], cfg.prior_minutes
-        ) * attack_mult
+        xg90 = self._blended_rate(player, "expected_goals", PRIOR_XG90[pos]) * attack_mult
+        xa90 = self._blended_rate(player, "expected_assists", PRIOR_XA90[pos]) * attack_mult
 
         attacking = xg90 * GOAL_POINTS[pos] + xa90 * ASSIST_POINTS
 
@@ -256,16 +282,12 @@ class ProjectionModel:
 
         saves = 0.0
         if pos == "GK":
-            saves90 = _shrunk_rate(
-                player.saves, player.minutes, PRIOR_SAVES90[pos], cfg.prior_minutes
-            )
+            saves90 = self._blended_rate(player, "saves", PRIOR_SAVES90[pos])
             # More shots faced against stronger attacks.
             saves90 *= _clamp(xgc / LEAGUE_AVG_GOALS, 0.6, 1.6)
             saves = saves90 / 3.0  # 1pt per 3 saves
 
-        bonus = _shrunk_rate(
-            player.bonus, player.minutes, PRIOR_BONUS90[pos], cfg.prior_minutes
-        )
+        bonus = self._blended_rate(player, "bonus", PRIOR_BONUS90[pos])
         if cfg.apply_2627_bps:
             bonus *= BPS_2627_ADJUSTMENT[pos]
             if player.penalties_order == 1:
@@ -275,11 +297,8 @@ class ProjectionModel:
         if cfg.include_defcon:
             # CBIT actions per 90, scaled by how much of a match a starter plays
             # and by how much defending this fixture is likely to demand.
-            cbit_rate = _shrunk_rate(
-                player.defensive_contribution,
-                player.minutes,
-                PRIOR_DEFCON90[pos],
-                cfg.prior_minutes,
+            cbit_rate = self._blended_rate(
+                player, "defensive_contribution", PRIOR_DEFCON90[pos]
             ) * MINUTES_PER_START
             cbit_rate *= _clamp(xgc / LEAGUE_AVG_GOALS, 0.85, 1.20)
             # One award (2pts) per match, once the positional threshold is met.
