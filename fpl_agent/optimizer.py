@@ -137,8 +137,20 @@ def optimize_squad(
     exclude_ids: Optional[Iterable[int]] = None,
     min_start_probability: float = 0.15,
     max_price: Optional[float] = None,
+    max_defensive_stack: Optional[int] = 2,
 ) -> Squad:
-    """Select the best legal 15-man squad within `budget` (in millions)."""
+    """Select the best legal 15-man squad within `budget` (in millions).
+
+    `max_defensive_stack` caps how many goalkeepers and defenders may come
+    from one club. The objective maximises a *sum* of expected points, and
+    expectation is linear, so correlation between players is invisible to it:
+    a keeper and two defenders from the same side look like three independent
+    chances of a clean sheet when they are one. That is fine for the mean and
+    badly wrong for the spread, since a single goal conceded wipes out all
+    three at once. Capping the stack is a blunt way to price a risk the
+    objective cannot express. Pass None to allow the club limit to bind
+    instead.
+    """
     lock_ids = set(lock_ids or [])
     exclude_ids = set(exclude_ids or [])
     all_projections = list(projections)
@@ -155,16 +167,19 @@ def optimize_squad(
 
     if HAVE_PULP:
         try:
-            return _optimize_ilp(pool, budget, max_per_team, bench_weight, lock_ids)
+            return _optimize_ilp(pool, budget, max_per_team, bench_weight, lock_ids,
+                                 max_defensive_stack)
         except OptimizerError:
             raise
         except Exception as exc:  # pragma: no cover - solver quirks
             log.warning("ILP solve failed (%s); falling back to local search", exc)
-    return _optimize_local_search(pool, budget, max_per_team, bench_weight, lock_ids)
+    return _optimize_local_search(pool, budget, max_per_team, bench_weight, lock_ids,
+                                 max_defensive_stack)
 
 
 def _optimize_ilp(
-    pool: list, budget: float, max_per_team: int, bench_weight: float, lock_ids: set
+    pool: list, budget: float, max_per_team: int, bench_weight: float, lock_ids: set,
+    max_defensive_stack: Optional[int] = None,
 ) -> Squad:
     problem = pulp.LpProblem("fpl_squad", pulp.LpMaximize)
     idx = range(len(pool))
@@ -197,6 +212,11 @@ def _optimize_ilp(
     for team_id in teams:
         members = [i for i in idx if pool[i].player.team == team_id]
         problem += pulp.lpSum(in_squad[i] for i in members) <= max_per_team
+        if max_defensive_stack is not None:
+            # Keepers and defenders from one club share a single clean sheet.
+            backline = [i for i in members if pool[i].player.position in ("GK", "DEF")]
+            if backline:
+                problem += pulp.lpSum(in_squad[i] for i in backline) <= max_defensive_stack
 
     for i in idx:
         problem += in_xi[i] <= in_squad[i]
@@ -218,7 +238,8 @@ def _optimize_ilp(
 
 
 def _optimize_local_search(
-    pool: list, budget: float, max_per_team: int, bench_weight: float, lock_ids: set
+    pool: list, budget: float, max_per_team: int, bench_weight: float, lock_ids: set,
+    max_defensive_stack: Optional[int] = None,
 ) -> Squad:
     """Greedy seed + steepest-ascent swaps. Used when PuLP is unavailable."""
     by_position = {pos: [] for pos in SQUAD_QUOTA}
@@ -238,16 +259,29 @@ def _optimize_local_search(
     team_counts: dict = {}
     locked = [p for p in pool if p.player.id in lock_ids]
 
+    backline_counts: dict = {}
+
     def can_add(projection: Projection) -> bool:
-        return team_counts.get(projection.player.team, 0) < max_per_team
+        if team_counts.get(projection.player.team, 0) >= max_per_team:
+            return False
+        if (max_defensive_stack is not None
+                and projection.player.position in ("GK", "DEF")
+                and backline_counts.get(projection.player.team, 0) >= max_defensive_stack):
+            return False
+        return True
 
     def add(projection: Projection) -> None:
         picks.append(projection)
         team_counts[projection.player.team] = team_counts.get(projection.player.team, 0) + 1
+        if projection.player.position in ("GK", "DEF"):
+            backline_counts[projection.player.team] = (
+                backline_counts.get(projection.player.team, 0) + 1)
 
     def remove(projection: Projection) -> None:
         picks.remove(projection)
         team_counts[projection.player.team] -= 1
+        if projection.player.position in ("GK", "DEF"):
+            backline_counts[projection.player.team] -= 1
 
     for projection in locked:
         if not can_add(projection):
