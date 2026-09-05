@@ -219,3 +219,40 @@ def _weak_but_legal_squad(projections):
         [p for p in projections if p.expected_points < 12],
         budget=100.0, max_per_team=3, bench_weight=0.12, lock_ids=set(),
     ).picks
+
+
+def _backline_counts(squad):
+    counts = {}
+    for p in squad.picks:
+        if p.player.position in ("GK", "DEF"):
+            counts[p.player.team] = counts.get(p.player.team, 0) + 1
+    return counts
+
+
+def test_defensive_stack_is_capped_by_default(projections):
+    """A keeper and defenders from one club share a single clean sheet, so the
+    default must not let the objective treat them as independent chances."""
+    squad = optimize_squad(projections, budget=100.0)
+    assert max(_backline_counts(squad).values()) <= 2
+
+
+def test_defensive_stack_limit_is_configurable(projections):
+    squad = optimize_squad(projections, budget=100.0, max_defensive_stack=1)
+    assert max(_backline_counts(squad).values()) <= 1
+
+
+def test_defensive_stack_can_be_disabled(projections):
+    """With the cap off only the three-per-club rule binds."""
+    squad = optimize_squad(projections, budget=100.0, max_defensive_stack=None)
+    assert max(_backline_counts(squad).values()) <= 3
+    assert_legal_squad(squad)
+
+
+def test_capping_the_stack_costs_points_but_stays_legal(projections):
+    """The cap trades expected points for a narrower spread -- it should never
+    produce an illegal squad, and never score above the unconstrained one."""
+    free = optimize_squad(projections, budget=100.0, max_defensive_stack=None)
+    capped = optimize_squad(projections, budget=100.0, max_defensive_stack=1)
+    assert capped.expected_points <= free.expected_points + 1e-6
+    assert len(capped.picks) == 15
+    assert len(capped.starters) == 11
