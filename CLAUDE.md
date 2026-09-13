@@ -100,18 +100,47 @@ calendar lives in `fpl_agent/data/european_fixtures.json`, sourced from
 uefa.com. `european.py` turns it into a start-probability multiplier for the
 affected fixture only.
 
-**The team lists are empty until the draws are made, and the feature is inert
-while they are** — `EuropeanCalendar.active` is False and every multiplier is
-1.0, so no projection moves. Fill `teams` in with FPL `short_name` codes
-(ARS, LIV, …) after the Europa and Conference League draws on 28 Aug 2026 and
-once the Champions League entrants are settled, then set `_teams_verified`.
+**The team lists are populated** (from uefa.com, after the 28 Aug 2026
+draws), so the feature is live:
 
-What it models is rotation, not fatigue. Europa League clubs play Thursday and
-then again on Saturday — two days — and that is what changes a team sheet.
-Champions League clubs play Tuesday or Wednesday and get three or four, so
-they are penalised far less. First collisions with the Premier League calendar:
-UCL matchday 1 (8–10 Sep) lands before GW4, and UEL matchday 1 (16/17 Sep)
-before GW5.
+| Competition | Plays | English clubs |
+|---|---|---|
+| UCL | Tue/Wed | ARS, AVL, LIV, MCI, MUN |
+| UEL | Thu | BOU, CRY, SUN |
+| UECL | Thu | BHA |
+
+Nott'm Forest is deliberately absent: they have a UEL 2026/27 club page on
+uefa.com but were missing from the qualified-teams summary, and uefa.com
+blocks direct fetching so the two could not be reconciled. Including a club
+wrongly penalises every one of its players for a match they never played.
+Worth resolving.
+
+What it models is rotation, not fatigue. Europa and Conference League clubs
+play Thursday and then again on Saturday -- two days -- and that is what
+changes a team sheet. Champions League clubs play Tuesday or Wednesday and
+get three or four, so they are penalised far less. Congested Premier League
+gameweeks in the first half are 7, 8, 10, 12 and 15; a squad's all-15 total
+drops by roughly 7-10 percent in those weeks, which matters most when timing
+a Bench Boost.
+
+## Standing rule -- target the weakest defences
+
+User preference, stated explicitly: **every squad or transfer suggestion must
+include at least one player facing Coventry, Crystal Palace or Ipswich** in
+the gameweek being planned. Name that player and say who they face.
+
+Those three are the worst defences in the league on actual goals conceded, by
+a clear margin -- Crystal Palace 2.75 a game, Coventry and Ipswich 2.50, when
+the league's best sit at 0.25-0.67. Coventry had also scored nothing at all
+through four gameweeks, so opposing defenders and keepers are as attractive
+as the attackers.
+
+Check the fixture list for the relevant gameweek rather than assuming who
+plays them, and prefer a player who is already a good pick on the underlying
+numbers and happens to have the fixture -- not a weak player justified only
+by the opponent. Recheck the goals-conceded table periodically: this rule is
+grounded in form, and if one of the three tightens up it should be dropped
+rather than applied out of habit.
 
 ## Scoring rules
 
