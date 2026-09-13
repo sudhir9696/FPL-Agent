@@ -113,6 +113,25 @@ they are penalised far less. First collisions with the Premier League calendar:
 UCL matchday 1 (8–10 Sep) lands before GW4, and UEL matchday 1 (16/17 Sep)
 before GW5.
 
+## Standing rule -- target the weakest defences
+
+User preference, stated explicitly: **every squad or transfer suggestion must
+include at least one player facing Coventry, Crystal Palace or Ipswich** in
+the gameweek being planned. Name that player and say who they face.
+
+Those three are the worst defences in the league on actual goals conceded, by
+a clear margin -- Crystal Palace 2.75 a game, Coventry and Ipswich 2.50, when
+the league's best sit at 0.25-0.67. Coventry had also scored nothing at all
+through four gameweeks, so opposing defenders and keepers are as attractive
+as the attackers.
+
+Check the fixture list for the relevant gameweek rather than assuming who
+plays them, and prefer a player who is already a good pick on the underlying
+numbers and happens to have the fixture -- not a weak player justified only
+by the opponent. Recheck the goals-conceded table periodically: this rule is
+grounded in form, and if one of the three tightens up it should be dropped
+rather than applied out of habit.
+
 ## Scoring rules
 
 The model targets the **2026/27** rules. The reference is a Google Doc,
