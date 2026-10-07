@@ -13,8 +13,10 @@ dependencies = ["requests>=2.28"]
 
 [project.optional-dependencies]
 # PuLP gives a provably optimal squad; without it a local search is used.
-solver = ["pulp>=2.7"]
-dev = ["pytest>=7.0", "pulp>=2.7"]
+# pulp 4.0 rewrote LpVariable on a Rust core and dropped LpVariable.dicts(),
+# which optimizer.py relies on -- cap below it until the solver code is ported.
+solver = ["pulp>=2.7,<4"]
+dev = ["pytest>=7.0", "pulp>=2.7,<4"]
 
 [project.scripts]
 fpl-agent = "fpl_agent.cli:main"
