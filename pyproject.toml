@@ -13,8 +13,11 @@ dependencies = ["requests>=2.28"]
 
 [project.optional-dependencies]
 # PuLP gives a provably optimal squad; without it a local search is used.
-solver = ["pulp>=2.7"]
-dev = ["pytest>=7.0", "pulp>=2.7"]
+# Capped below 4.0: PuLP 4.x dropped LpVariable.dicts(), which optimizer.py
+# relies on, so >=4.0 silently breaks the ILP path into the local-search
+# fallback instead of raising.
+solver = ["pulp>=2.7,<4"]
+dev = ["pytest>=7.0", "pulp>=2.7,<4"]
 
 [project.scripts]
 fpl-agent = "fpl_agent.cli:main"
