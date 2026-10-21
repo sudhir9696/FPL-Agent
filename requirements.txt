@@ -1,3 +1,3 @@
 requests>=2.28
-pulp>=2.7      # optional: exact ILP squad optimisation
+pulp>=2.7,<4   # optional: exact ILP squad optimisation (4.x dropped LpVariable.dicts())
 pytest>=7.0    # tests only
